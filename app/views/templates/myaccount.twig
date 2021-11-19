@@ -1,0 +1,72 @@
+{% extends 'layout.twig' %}
+
+{#
+{% if currentUser.userId %}
+#}
+    {% block pagetitle %}
+        <title>Mon compte - {{ currentUser.userName }}</title>
+    {% endblock %}
+
+    {% block content %}    
+        <header class="header bg-primary">
+            <div class="container-fluid d-flex flex-column text-white text-uppercase text-center">
+                <h2>{{ currentUser.userName}}</h2>
+            </div>
+        </header>
+
+        <section class="page-section">
+            <div class="container d-flex align-items-center flex-column">
+                <h3 class="text-white">Vos informations de connexion</h3>
+                <div class="col-sm-12 col-lg-6 text-white" id="userInfos">
+
+                {% if session.tmp.editPasswordError %}
+                    {% for message in session.tmp.editPasswordError %}
+                        <div class="alert alert-danger" role="alert">
+    		        	    {{ message }}
+    		        	</div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if session.tmp.editPasswordSuccess %}
+                        <div class="alert alert-success" role="alert">
+    				        {{ session.tmp.editPasswordSuccess }}
+                        </div>
+                {% endif %}
+                
+                    <form action="{{ session.routes.passedit }}{{ currentUser.userId }}" method="post">
+                        <label for="usermail">Adresse email enregistrée</label>
+                        <input readonly class="form-control mb-3" name="usermail" type="email" value="{{ currentUser.userMail }}"/>
+                        <label for="username">Nom d'utilisateur</label>
+                        <input readonly class="form-control mb-3" name="username" type="text" value="{{ currentUser.userName }}"/>
+
+                        <label for="password" class="mt-5">Nouveau mot de passe</label>
+                        <input class="form-control mb-2" type="password" name="password" placeholder="Nouveau mot de passe">
+                        <label for="passwordCheck">Confirmer mot de passe</label>
+                        <input class="form-control"  type="password"  name="passwordCheck" placeholder="Confirmer mot de passe">
+
+                        <!-- edit password button -->
+                        <button class="btn btn-outline-warning btn-sm text-white btn-admin mt-3" type="button" data-bs-toggle="modal" data-bs-target="#editPassword-{{ currentUser.userId }}">Modifier le mot de passe</button>
+                </div>
+
+                    <!-- edit password modal-->
+                    <div class="modal fade" id="editPassword-{{ currentUser.userId }}" tabindex="-1" role="dialog" aria-labelledby="editPasswordLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-body">
+                              <p>Modifier mot de passe ?</p>
+                            <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm text-white">Modifier</a>
+                    </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+            </div>
+        </section>
+    {% endblock %}
+{#
+{% endif %}
+{% if not currentUser.userId %}
+    {% do redirect({{ redirection }}) %}
+{% endif %}
+#}

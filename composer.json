@@ -1,0 +1,21 @@
+{
+    "name": "gelroc/p5-blog",
+    "description": "Projet #5 du parcours D\u0000veloppeur d'applications PHP/Symfony d'OpenClassrooms",
+    "autoload": {
+        "psr-4": {
+            "Gelroc\\P5Blog\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "geLroC",
+            "email": "dev.corentin.legriffon@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "altorouter/altorouter": "^2.0",
+        "twig/twig": "^3.3",
+        "phpmailer/phpmailer": "^6.5"
+    }
+}

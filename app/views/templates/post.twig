@@ -1,0 +1,129 @@
+{% extends 'layout.twig' %}
+
+{% block pagetitle %}
+    <title>Corentin Legriffon - {{ currentPost.postTitle}}</title>
+{% endblock %}
+
+{% block content %}
+    <header class="header bg-primary" id="head-article" style ="background-image: url(../public/images/blog/{{ currentPost.urlImg }}); background-repeat: no-repeat; background-size: 100%; bottom 50px right 100px; background-position:center; background-attachment: fixed;">
+        <div class="container-fluid">
+            <div class="col-12 align-items-center text-white text-center text-uppercase">
+                <h2>{{ currentPost.postTitle }}</h2>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-section" id="article">
+        <div class="col-12 text-center lede">
+            <p>{{ currentPost.postLede }}</p>
+        </div>
+        <div class="container">
+            {% if session.tmp.postError %}
+                {% for message in session.tmp.postError %}
+                    <div class="alert alert-danger" role="alert">
+		        	    {{ message|nl2br }}
+		        	</div>
+                {% endfor %}
+            {% endif %}
+            {% if session.tmp.fileError %}
+                {% for message in session.tmp.fileError %}
+                    <div class="alert alert-danger" role="alert">
+		        	    {{ message|nl2br }}
+		        	</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if session.tmp.postSuccess %}
+                <div class="alert alert-success" role="alert">
+				    {{ session.tmp.postSuccess|nl2br }}
+                </div>
+            {% endif %}
+            <div class="author-date text-white">
+                <p>Par <strong>{{ currentPost.userName }}</strong>, le {{ currentPost.postCreationDateFr }} 
+                {% if currentPost.postUpdateDateFr is not null %}
+                    <span style="font-size : 0.8em;">(modifié le {{ currentPost.postUpdateDateFr }})</span></p>
+                {% endif %}
+            </div>
+            <div class="article-content text-white mt-5">
+                <p>{{ currentPost.postContent|raw }}</p>
+            </div>
+        </div>
+    </section>
+    <div class="divider-custom3 divider-light mt-3">
+        <div class="divider-custom-line"></div>
+    </div>
+    {% if session.username and session.userIsAdmin == 1 %}
+        <div class="text-center m-2">
+            <a href="{{ session.routes.editpost }}{{ currentPost.postId }}" type="button" class="btn btn-outline-warning btn-sm text-white btn-admin" type="submit">Modifier l'article</a>
+            <!-- Delete post button -->
+            <button class="btn btn-outline-danger btn-sm text-white btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#deletePost-{{ currentPost.postId }}">Supprimer</button>
+                <!-- Delete post modal-->
+                <div class="modal fade" id="deletePost-{{ currentPost.postId }}" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p>Supprimer l'article ?</p>
+                                <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
+                                <a href="{{ session.routes.deletepost }}{{ currentPost.postId }}"  type="submit" class="btn btn-outline-danger btn-sm text-white">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    {% endif %}
+    <section class="page-section-comment" id="comments">
+        <div class="container comments mb-5 mt-3 p-2" >
+            <h3 class="text-uppercase text-white mb-0">Commentaires</h3>
+            <div class="row text-center mt-5">
+
+            {% if session.tmp.commentError %}
+                <div class="alert alert-danger" role="alert">
+		            {{ session.tmp.commentError|nl2br }}
+		        </div>
+            {% endif %}
+
+            {% if session.tmp.commentSuccess %}
+                <div class="alert alert-success" role="alert">
+				    {{ session.tmp.commentSuccess|nl2br }}
+                </div>
+            {% endif %}
+
+            </div>
+            {% if session.username %} 
+            <div class="row mt-2">
+                <div class="col-sm-12 col-lg-6 form-group m-3">
+                    <form action="{{ session.routes.newcomment }}{{ currentPost.postId }}" method="post" id="commentform">
+                        <textarea class="form-control" name="comment" type="text" placeholder="Votre commentaire..." style="height: 10rem" data-sb-validations="required"></textarea>
+                        <div class="invalid-feedback" data-sb-feedback="message:required">Merci d'écrire un commentaire.</div>
+                        <!-- Post comment button -->
+                        <button class="btn btn-primary mt-2" type="button" data-bs-toggle="modal" data-bs-target="#postComment-{{ post.postId }}">Envoyer</button>
+                        <!-- Post comment modal-->
+                        <div class="modal fade" id="postComment-{{ post.postId }}" tabindex="-1" role="dialog" aria-labelledby="postCommentLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-body">
+                                <p>Envoyer le commentaire ?</p>
+                                <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Non</button>
+                                <button type="submit" class="btn btn-outline-success btn-sm text-white">Oui</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+            {% for comment in comments %}
+                <div class="row m-2">
+                    <div class="col-sm-12 col-lg-6 postedcomment">
+                        {% if comment.pendingStatus == 0 %}
+                            <p class="author-date"><strong>{{ comment.userName }} </strong>, le {{ comment.commentDateFr }}</p>
+                            <p class="comment-content text-white">{{ comment.commentContent }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+{% endblock %}

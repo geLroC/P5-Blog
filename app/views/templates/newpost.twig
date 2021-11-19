@@ -1,0 +1,85 @@
+{% extends 'layout.twig' %}
+
+{% block pagetitle %}
+    <title>Corentin Legriffon - Nouvel article</title>
+{% endblock %}
+
+{% block content %}
+{% if session.username and session.userIsAdmin == 1 %}
+
+<header class="header bg-primary" id="head-editor">
+    <div class="container-fluid d-flex flex-column text-white  text-uppercase">
+        <h2>Nouvel article</h2>
+    </div>
+</header>
+<section class="page-section" id="edit-form">
+    <div class="container">
+        <div class="container text-center">
+            {% if session.tmp.postError %}
+                {% for message in session.tmp.postError %}
+                    <div class="alert alert-danger" role="alert">
+		        	    {{ message|nl2br }}
+		        	</div>
+                {% endfor %}
+            {% endif %}
+            {% if session.tmp.fileError %}
+                {% for message in session.tmp.fileError %}
+                    <div class="alert alert-danger" role="alert">
+		        	    {{ message|nl2br }}
+		        	</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if session.tmp.postSuccess %}
+                <div class="alert alert-success" role="alert">
+				    {{ session.tmp.postSuccess|nl2br }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="row text-white">
+            <div class="col-sm-12 col-lg-6">
+                <form action="{{ session.routes.addpost }}" method="post" enctype="multipart/form-data" id="editform">
+                    <label for="title">Titre</label>
+                    <input class="form-control bg-primary" name="title" type="text" placeholder="Titre de l'article..." data-sb-validations="required" />
+
+                    <label for="lede">Extrait</label>
+                    <input class="form-control bg-primary" name="lede" type="text" placeholder="Extrait de l'article..." data-sb-validations="required" maxlenght="120"/>
+
+                    <label for="image">Photo de l'article</label>
+                    <input type="file" class="form-control bg-primary" name="image" id="image"/>
+
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                    <label for="content">Contenu de l'article</label>
+                    <textarea class="form-control bg-primary" name="content" type="text" placeholder="Contenu de l'article..." data-sb-validations="required" style="height: 20rem"></textarea>
+                    <div class="invalid-feedback" data-sb-feedback="name:required">Merci de renseigner un contenu.</div>
+            </div>
+                    <!-- Send post button -->
+                    <button class="btn btn-primary mt-2" type="button" data-bs-toggle="modal" data-bs-target="#sendPost">Mettre en ligne</button>
+                    <!-- Send post modal-->
+                    <div class="modal fade" id="sendPost" tabindex="-1" role="dialog" aria-labelledby="sendPostLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p>Mettre en ligne l'article ?</p>
+                                <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
+                                <button type="submit" class="btn btn-outline-success btn-sm text-white">Envoyer</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% if session.username is not defined or  session.userIsAdmin == 0 %}
+    <header class="header">
+      <div class="container">
+          <h1 class="text-center text-danger text-uppercase mb-5">ACCÈS INTERDIT</h1>
+        <h2 class="text-center text-success "><a href="{{ session.routes.home }}">Retour à l'accueil</a></h2>
+      </div>
+    </header>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% import 'form.twig' as form %}
+
+{% block contactForm %}
+  <!--Contact Section-->
+    <section class="page-section" id="contact">
+      <div class="container">
+        <h2 class="page-section-heading text-center text-uppercase text-white mb-0">Me contacter</h2>
+        <div class="divider-custom">
+          <div class="divider-custom-line"></div>
+        </div>
+
+        <!-- Contact Form-->
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-xl-7">
+
+            {% if session.tmp.mailErrors %}
+              <div class="alert alert-danger" role="alert">
+		            {{ session.tmp.mailErrors|nl2br }}
+		        	</div>
+            {% endif %}
+
+            {% if session.tmp.mailSuccess %}
+              <div class="alert alert-success" role="alert">
+				        {{ session.tmp.mailSuccess|nl2br }}
+              </div>
+            {% endif %}
+
+            <form id="contactForm" method="post" action="{{ session.routes.mail }}">
+
+              {{ form.input('name', 'text' ,'Votre nom') }}
+              {{ form.input('email', 'email' ,'Votre adresse mail') }}
+              {{ form.textarea('message','Votre message') }}
+              
+              <!-- Submit Button-->
+              {{ form.button('submit', '' , 'Envoyer') }}
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--Contact Section End-->
+{% endblock %}

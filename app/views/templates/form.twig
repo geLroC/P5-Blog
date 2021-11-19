@@ -1,0 +1,17 @@
+{% macro input(name, type, label) %}
+    <div class="form-floating mb-3">
+        <input class="form-control" name="{{ name }}" type="{{ type }}" placeholder="{{ label }}"/>
+        <label for="{{ name }}">{{ label }}</label>
+    </div>
+{% endmacro %}
+
+{% macro textarea(name, label) %}
+    <div class="form-floating mb-3">
+        <textarea class="form-control" name="{{ name }}" placeholder="{{ label}}" style="height: 10rem"></textarea>
+        <label for="{{ name }}">{{ label }}</label>
+    </div>
+{% endmacro %}
+
+{% macro button(type, id, label) %}
+    <button class="btn btn-primary btn-xl" {{ id }} type="{{ type }}">{{ label }}</button>
+{% endmacro %}

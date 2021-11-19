@@ -1,0 +1,71 @@
+{% extends 'layout.twig' %}
+
+{% block pagetitle %}
+    <title>Corentin Legriffon - Développeur PHP</title>
+{% endblock %}
+
+{% block content %}
+  <!--Header-->
+  <section class="page-section" id="header">
+    <header class="header bg-primary text-white text-center">
+      <div class="container d-flex align-items-center flex-column">
+        <img class="header-avatar mb-5" src="public/images/avatar.png" alt="It's a me !"/>
+        <h1 class="header-heading text-uppercase mb-0">Corentin Legriffon</h1>
+        <div class="divider-custom divider-light">
+          <div class="divider-custom-line"></div>
+        </div>
+        <p class="header-subheading font-weight-light mb-0">Développeur<br/>HTML5 - CSS3 - PHP7/8</p>
+        <div class="divider-custom divider-light">
+          <div class="divider-custom-line"></div>
+        </div>
+        <a href="#contact" class="btn btn-secondary">Me contacter</a>
+      </div>
+    </header>
+  </section>
+  <!--Header End-->
+
+  <!--Blog Section-->
+  <!-- LEDE MAX CHAR : 150-->
+  <section class="page-section blog" id="blog">
+    <div class="container d-flex align-items-center flex-column">
+      <h2 class="page-section-heading text-center text-uppercase text-white mb-0">Blog</h2>
+      <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+      </div>
+      <p class="blog-sub font-weight-light text-white mb-0">Derniers articles publiés</p>
+      <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+      </div>
+      <div class="row">
+      
+        {% for post in posts %}
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-5">
+                <div class="blog-item mx-auto" data-bs-toggle="modal" data-bs-target="#blogModal1">
+                    <a href="{{ session.routes.post }}{{ post.postId }}">
+                        <div class="blog-item-caption d-flex h-100 w-100">
+                            <div class="blog-item-caption-content"></div>
+                        </div>
+                        <img class="img-fluid" src="public/images/blog/{{ post.urlImg }}" alt="{{ post.postTitle }}">
+                        <div class="blog-item-title text-white text-uppercase mb-0 mt-2">
+                            <h5>{{ post.postTitle }}</h5>
+                        </div>
+                        <div class="divider-custom2">
+                            <div class="divider-custom-line"></div>
+                        </div>
+                        <div class="blog-item-lede text-white ml-10">
+                            <p>{{ post.postLede }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  </section>
+  <!--Blog Section End-->
+
+{% include 'about.twig' %}
+{% include 'contact.twig' %}
+
+{% endblock content%}

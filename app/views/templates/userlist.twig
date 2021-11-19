@@ -1,0 +1,95 @@
+{% extends 'layout.twig' %}
+
+{% block pagetitle %}
+    <title>Corentin Legriffon - Liste des utilisateurs</title>
+{% endblock %}
+
+{% block content %}
+{% if session.username and session.userIsAdmin == 1 %}
+
+<header class="header">
+    	<div class="container">
+    		<h1 class="text-center text-white text-uppercase mb-5">Gestion des utilisateurs</h1>
+    	</div>
+    </header>
+<section class="page-section bg-primary" id="accountDetails">
+    <div class="container">
+        <div class="col-12 text-white mx-auto justify-content-center">
+            <table >
+                <tr class="columnTitle">
+                        <td>Actif</td>
+                        <td>Adresse email</td>
+                        <td>Nom d'utilisateur</td>
+                        <td>Date d'inscription</td>
+                        <td>Administrateur</td>
+                        <td></td>
+                    </tr>
+
+                {% for user in userlist %}
+                    <tr>
+                        {% if user.userName == 'Utilisateur supprimé' and user.userIsActive == 0 %}
+                        {% endif %}
+
+                        {% if user.userName != 'Utilisateur supprimé' %}
+                        <td class="tableResults">
+                        {{ dump(session.routes.activateUser,user.userId)}}
+                            {% if user.userIsActive == 0 %}
+                                <a href="{{ session.routes.activateUser }}{{ user.userId }}1" class="btn btn-sm btn-outline-success btn-admin">Oui</a>
+                                <a href="#" class="btn btn-sm btn-danger btn-admin">Non</a>
+                            {% endif %}                           
+                            {% if user.userIsActive == 1 %}
+                                <a href="#" class="btn btn-sm btn-success btn-admin">Oui</a>
+                                <a href="{{ session.routes.activateUser }}{{ user.userId }}0" class="btn btn-sm btn-outline-danger btn-admin">Non</a>
+                            {% endif %}
+                        </td>
+                        <td class="tableResults">{{ user.userMail }}</td>
+                        <td class="tableResults">{{ user.userName }}</td>
+                        <td class="tableResults">{{ user.userCreationDateFr }}</td> 
+                        <td class="tableResults">
+                            {% if user.userIsAdmin == 0 %}
+                                <a href="{{ session.routes.setUserAdmin }}{{ user.userId }}1" class="btn btn-sm btn-outline-success btn-admin">Oui</a>
+                                <a href="#" class="btn btn-sm btn-danger btn-admin">Non</a>
+                            {% endif %}                           
+                            {% if user.userIsAdmin == 1 %}
+                                <a href="#" class="btn btn-sm btn-success btn-admin">Oui</a>
+                                <a href="{{ session.routes.setUserAdmin }}{{ user.userId }}0" class="btn btn-sm btn-outline-danger btn-admin">Non</a>
+                            {% endif %}</td>
+                        <td>
+                            <input type="hidden" name="userId" value="{{ user.userId }}">
+                            <!-- Delete user button -->
+                            <button class="btn btn-sm btn-danger btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#deleteUser-{{ user.userId }}">Supprimer l'utilisateur</button>
+                            <!-- Delete user modal-->
+                            <div class="modal fade" id="deleteUser-{{ user.userId }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <div class="modal-body">
+                                    <p>Supprimer le compte utilisateur ?</p>
+                                    <p class="smalltext">Cette action est irreversible</p>
+                                    <button type="button" class="btn btn-outline-primary text-white" data-bs-dismiss="modal">Annuler</button>
+                                    <a href="{{ session.routes.deleteUser}}{{ user.userId }}" type="submit" class="btn btn-outline-danger text-white">Supprimer</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if session.username is not defined or  session.userIsAdmin == 0 %}
+    <header class="header">
+      <div class="container">
+          <h1 class="text-center text-danger text-uppercase mb-5">ACCÈS INTERDIT</h1>
+        <h2 class="text-center text-success "><a href="{{ session.routes.home }}">Retour à l'accueil</a></h2>
+      </div>
+    </header>
+{% endif %}
+
+{% endblock %}
+

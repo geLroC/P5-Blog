@@ -1,0 +1,81 @@
+{% extends 'layout.twig' %}
+
+{% block pagetitle %}
+    <title>Authentification / Inscription</title>
+{% endblock %}
+
+{% block content %}
+    <!--Log in-->
+    <section class="page-section" id="loginSection">
+    	<div class="container">
+    		<h1 class="text-center text-white text-uppercase mb-5">Se connecter</h1>
+    		<div class="col-sm-12 col-lg-3 text-white mx-auto justify-content-center">
+
+            {% if session.tmp.loginError %}
+                {% for message in session.tmp.loginError %}
+                    <div class="alert alert-danger" role="alert">
+		        	    {{ message|nl2br }}
+		        	</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if session.tmp.loginSuccess %}
+                <div class="alert alert-success" role="alert">
+				    {{ session.tmp.loginSuccess|nl2br }}
+                </div>
+            {% endif %}
+
+    			<form method="post" action="{{ session.routes.login }}">
+    				<label for="username">Nom d'utilisateur</label>
+					<input class="form-control bg-secondary mb-3" name="username" type="text" placeholder="Nom d'utilisateur"/>
+	
+    				<label for="password">Mot de passe</label>
+					<input class="form-control bg-secondary" name="password" type="password" placeholder="Mot de passe"/>
+					<button class="btn btn-primary justify-content-center mt-2" id="submitButton" type="submit">Se connecter</button>
+    			</form>
+    		</div>
+    	</div>
+    </section>
+    <!--Log in end-->
+
+    <!--Account creation-->
+    <section class="page-section bg-primary" id="signin">    	
+   		<div class="container">
+   			<h1 class="text-center text-white text-uppercase mb-5">Créer un compte</h1>
+    		<div class="col-sm-12 col-lg-3 text-white m-auto">
+            
+            {% if session.tmp.registerError %}
+                {% for message in session.tmp.registerError %}
+                    <div class="alert alert-danger" role="alert">
+		        	    {{ message|nl2br }}
+		        	</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if session.tmp.registerSuccess %}
+                <div class="alert alert-success" role="alert">
+				    {{ session.tmp.registerSuccess|nl2br }}
+                </div>
+            {% endif %}
+
+    			<form action="{{ session.routes.register }}" method="post">
+                    <label for="usermail">Adresse email</label>
+                    <input class="form-control mb-3" name="usermail" type="email" placeholder="Adresse email"/>
+        
+    		      	<label for="username">Nom d'utilisateur</label>
+                    <input class="form-control mb-3" name="username" type="text" placeholder="Nom d'utilisateur"/>
+	       
+    		      	<label for="password">Mot de passe</label>
+                    <input class="form-control" name="password" type="password" placeholder="Mot de passe"/>
+        
+                    <label for="passwordCheck">Validez votre mot de passe</label>
+                    <input class="form-control" name="passwordCheck" type="password" placeholder="Mot de passe"/>
+        
+                    <button class="btn btn-secondary mt-2" name="submit" id="submitButton" type="submit">Créer un compte</button>
+    			</form>
+    		</div>
+    	</div>
+    </section>
+    <!--Account creation end-->
+
+{% endblock content%}
