@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'username' => '',
-    'password' => '',
+    'username' => '********',
+    'password' => '********',
     'smtp' => 'smtp.gmail.com',
-    'post' => '465'
+    'port' => '465'
 ];

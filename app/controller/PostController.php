@@ -65,7 +65,7 @@ class PostController{
         if(empty($postErrors)){
             if($_FILES['image']['error'] === UPLOAD_ERR_NO_FILE){
                 $post->editPostNoPic($title, $lede, $content, $postId);
-                $postSuccess[] = "L'article ".$title." a bien été modifié.";
+                $postSuccess = "L'article ".$title." a bien été modifié.";
             }
             else{
                 //Set file variables

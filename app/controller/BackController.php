@@ -12,7 +12,7 @@ require './vendor/phpmailer/src/SMTP.php';
 		
 		public function mailer(){
 			global $twig;
-			$data = require __DIR__.'/../config/dbconfig.php';
+			$data = require __DIR__.'/../config/mailerconfig.php';
 			$mail = new PHPMailer(true);
 			$mailSuccess = [];
 			$mailErrors = [];
