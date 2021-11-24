@@ -22,7 +22,8 @@ class CommentManager{
         INNER JOIN post p 
         ON c.postId = p.postId 
         ORDER BY commentDate DESC');
-        return $comment;
+        $comments = $comment->fetchAll(PDO::FETCH_ASSOC);
+        return $comments;
     }
     
     public function postComment($commentContent, $commentAuthor, $postId){
@@ -35,31 +36,38 @@ class CommentManager{
     
     public function commentDelete($commentId){
         $commentid = implode('', $commentId);
-        $req = DbConnect::connect()->prepare('DELETE FROM comments WHERE commentId = ?');
+        $req = DbConnect::connect()->prepare('DELETE FROM comments 
+        WHERE commentId = ?');
         $req->execute([$commentid]);
     }
     
     public function setValidComment($commentId){
         $commentId = implode('',$commentId);
-        $req = DbConnect::connect()->prepare('UPDATE comments SET pendingStatus = 0 WHERE commentId = ?');
+        $req = DbConnect::connect()->prepare('UPDATE comments 
+        SET pendingStatus = 0 
+        WHERE commentId = ?');
         $res = $req->execute([$commentId]);
     }
     
     public function pendingCommentsCount(){
-        $req = DbConnect::connect()->query('SELECT COUNT(*) FROM comments WHERE pendingStatus = 1');
+        $req = DbConnect::connect()->query('SELECT COUNT(*) 
+        FROM comments 
+        WHERE pendingStatus = 1');
         $res = $req->fetchColumn();
         return $res;
     
     }
 
-    public function commentCount(){
-        $req = DbConnect::connect()->query('SELECT COUNT(*) FROM comments');
+    public function validCommentsCount(){
+        $req = DbConnect::connect()->query('SELECT COUNT(*) 
+        FROM comments 
+        WHERE pendingStatus = 0');
         $res = $req->fetchColumn();
         return $res;
     }
 
     public function getPaginCommentList($page, $commentsByPage){
-        $nbcomments = self::commentCount();
+        $nbcomments = self::validCommentsCount();
         $start = ($page-1)*$commentsByPage;
         $comment = DbConnect::connect()->query('SELECT c.commentId, c.userId AS userId, c.commentContent, c.pendingStatus, c.postId, DATE_FORMAT(commentDate, \'%d/%m/%Y à %Hh%i\') AS commentDateFr, p.postId, p.postTitle, p.urlImg 
         FROM comments c 

@@ -21,7 +21,7 @@ require 'vendor/autoload.php';
             ['GET', '/user/list', 'UserController#userList', 'userlist'],
             ['GET', '/user/list/delete-user/[:userId]', 'UserController#deleteUser', 'deleteUser'],
             ['GET', '/user/list/admin/[:userId][:userIsAdmin]', 'UserController#setUserAdmin','setUserAdmin'],
-            ['POST', '/user/activate/user-[:userId][:userIsActive]', 'UserController#setUserActive', 'activateUser'],
+            ['GET', '/user/activate/user-[:userId][:userIsActive]', 'UserController#setUserActive', 'activateUser'],
             ['POST', '/user/deactivate/user-[:userId]', 'UserController#setUserActive', 'deactivateUser'],
             ['GET', '/user/myaccount', 'UserController#myAccount', 'account'],
             ['POST', '/user/myaccount/editpassword/[:userId]', 'UserController#editPassword', 'passedit'],

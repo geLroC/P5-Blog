@@ -40,7 +40,7 @@ class PostManager{
         $deleteImg = DbConnect::connect()->prepare('SELECT urlImg FROM post where postId = ?');
         $deleteImg->execute([$id]);
         $img = $deleteImg->fetchColumn();
-        unlink('../public/images/blog/'.$img);
+        unlink('public/images/blog/'.$img);
         //DELETE ASSOCIATED COMMENTS 
         $deleteComments = DbConnect::connect()->prepare('DELETE FROM comments WHERE postId = ?');
         $deleteComments->execute([$id]);

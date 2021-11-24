@@ -7,6 +7,7 @@ class UserController{
 
     function userList(){
         global $twig;
+        unset($_SESSION['tmp']);
         $userList = new UserManager();
         $list = $userList->getUserList();
         echo $twig->render('userlist.twig', ['userlist'=>$list]);
@@ -28,13 +29,16 @@ class UserController{
         global $twig;
         $user = new UserManager();
         $user->setActive($userId, $userIsActive);
-        echo $twig->render('userlist.twig', ['userlist'=>$list]);
+        header('Location:'.$_SESSION['routes']['userlist']);
+        //echo $twig->render('userlist.twig', ['userlist'=>$list]);
     }
     function deleteUser($userId){
+        unset($_SESSION['tmp']);
         $user = new UserManager();
+        $username = $user->getUsername(implode($userId));
+        $_SESSION['tmp'] = 'L\'utilisateur <strong>'.$username.'</strong> a été supprimé';
         $user->userDelete($userId);
-        $link = $router->generate('userlist');
-        header('Location:'.$link);
+        header('Location:'.$_SESSION['routes']['userlist']);
     }
     function myAccount(){
         global $twig;
@@ -84,7 +88,6 @@ class UserController{
         else{
             $_SESSION['tmp'] = ['editPasswordError'=>$editPasswordErrors];
         }
-        die(var_dump($_SESSION['tmp'],$editPasswordErrors,$editPasswordSuccess));
         header('Location:'.$_SESSION['routes']['account']);
     }
 }

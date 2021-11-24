@@ -40,6 +40,7 @@ class PostController{
         $post = new PostManager();
         $postErrors = [];
         $postSuccess = [];
+        $fileErrors = [];
         $title = $_POST['title'];
         $lede = $_POST['lede'];
         $content = $_POST['content'];

@@ -28,7 +28,7 @@ class UserManager{
     }
 
     public function getUsername($userid){
-    	$req = DbConnect::connect()->prepare('SELECT userName FROM user WHERE userId = ?');
+		$req = DbConnect::connect()->prepare('SELECT userName FROM user WHERE userId = ?');
     	$req->execute([$userid]);
     	$res = $req->fetchColumn();
     	return $res;
@@ -60,12 +60,12 @@ class UserManager{
     }
 
     public function setActive($userId,$userIsActive){
-    	$userIsActive = implode('',$userIsActive);
-    	$userId = implode('',$userId);
+    	$userIsActive = implode($userIsActive);
+    	$userId = implode($userId);
     	$req = DbConnect::connect()->prepare('UPDATE user 
 		SET userIsActive = :userIsActive 
 		WHERE userId = :userId');
-    	$res = $req->execute(array("userId"=>$userId, "userIsActive"=>$userIsActive));
+    	$res = $req->execute(["userId"=>$userId], ["userIsActive"=>$userIsActive]);
     	return $res;
     }
 
@@ -75,7 +75,6 @@ class UserManager{
 		SET userName = "Utilisateur supprimé", userIsActive = null, userIsAdmin = null 
 		WHERE userId = ?');
 		$deleteUser->execute([$userId]);
-
     }
 
     public function registerUser($usermail, $username, $password){

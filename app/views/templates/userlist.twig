@@ -15,6 +15,11 @@
 <section class="page-section bg-primary" id="accountDetails">
     <div class="container">
         <div class="col-12 text-white mx-auto justify-content-center">
+                {% if session.tmp %}
+                    <div class="alert alert-danger text-center" role="alert">
+		        	    {{ session.tmp|raw }}
+		        	</div>
+                {% endif %}
             <table >
                 <tr class="columnTitle">
                         <td>Actif</td>
@@ -24,7 +29,6 @@
                         <td>Administrateur</td>
                         <td></td>
                     </tr>
-
                 {% for user in userlist %}
                     <tr>
                         {% if user.userName == 'Utilisateur supprimé' and user.userIsActive == 0 %}
@@ -32,14 +36,13 @@
 
                         {% if user.userName != 'Utilisateur supprimé' %}
                         <td class="tableResults">
-                        {{ dump(session.routes.activateUser,user.userId)}}
                             {% if user.userIsActive == 0 %}
-                                <a href="{{ session.routes.activateUser }}{{ user.userId }}1" class="btn btn-sm btn-outline-success btn-admin">Oui</a>
+                                <a href="{{ session.routes.activateUser }}{{ user.userId }}1" type="submit" class="btn btn-sm btn-outline-success btn-admin">Oui</a>
                                 <a href="#" class="btn btn-sm btn-danger btn-admin">Non</a>
                             {% endif %}                           
                             {% if user.userIsActive == 1 %}
                                 <a href="#" class="btn btn-sm btn-success btn-admin">Oui</a>
-                                <a href="{{ session.routes.activateUser }}{{ user.userId }}0" class="btn btn-sm btn-outline-danger btn-admin">Non</a>
+                                <a href="{{ session.routes.activateUser }}{{ user.userId }}0" type="submit" class="btn btn-sm btn-outline-danger btn-admin">Non</a>
                             {% endif %}
                         </td>
                         <td class="tableResults">{{ user.userMail }}</td>

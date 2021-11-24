@@ -1,12 +1,12 @@
 # P5-Blog
 Projet numéro 5 du parcours Développeur d'applications PHP/Symfony d'OpenClassrooms.<br/>
-Créer un bloc **_from scratch_** en PHP orienté objet avec une architecture MVC.<br/><br/>
+Créer un blog **_from scratch_** en PHP orienté objet avec une architecture MVC.<br/><br/>
 
 <h2>Installation</h2>
 
-- Copiez le repository sur votre machine,
+- Clonez le repository sur votre machine,
 
-- Importez la base de données p5blog.sql sur votre serveur,
+- Télchargez le fichier `/database/p5blog.sql` et importez la base de données sur votre serveur,
 
 - Dans le fichier `/app/config/dbconfig.php` renseignez les informations nécessaires à la connexion à votre base de données<br/>
 - Dans le fichier `/app/config/mailerconfig.php` renseignez les informations du compte de messagerie,<br/>
@@ -16,15 +16,15 @@ Créer un bloc **_from scratch_** en PHP orienté objet avec une architecture MV
 Des comptes administrateurs et utilisateurs sont déjà présents dans la base de donnée.
 
 - Le compte administrateur est `Admin/tata`
-- Le compte utilisateur est `pootest/tata`
+- Le compte utilisateur est `User/tata`
 
 Vous pouvez bien-sûr créer vos propres identifiants.
 
 <h2>Dépendances utilisées</h2>
 
 
-**Twig**  `composer require twig/twig`
+**Twig**&emsp;&emsp;&emsp;&emsp;`composer require twig/twig`
 
-**Altorouter**  `composer require altorouter/altorouter`
+**Altorouter**&ensp;&emsp;`composer require altorouter/altorouter`
 
-**PHPMailer**  `composer require phpmailer/phpmailer`
+**PHPMailer**&ensp;&emsp;`composer require phpmailer/phpmailer`
