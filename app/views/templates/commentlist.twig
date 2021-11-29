@@ -33,7 +33,7 @@
                             <tr>
                             {% if comments.pendingStatus == 1 %}
                                 <td class="tableResults" id="title" style="background-image: url(../../../public/images/blog/{{ comments.urlImg }}); background-repeat: no-repeat; background-size: 100%; background-position:center;"><a href="{{ session.routes.post }}{{ comments.postId }}">{{ comments.postTitle }}</a></td>
-                                <td class="tableResults">{{ username }}</td>
+                                <td class="tableResults">{{ comments.userName }}</td>
                                 <td class="tableResults">{{ comments.commentContent }}</td>
                                 <td class="tableResults">{{ comments.commentDateFr }}</td>
                                 <td class="tableResults">                         
@@ -86,7 +86,7 @@
                     <tr>
                         {% if validcomment.pendingStatus == 0 %}
                         <td class="tableResults" id="title" style="background-image: url(../../../public/images/blog/{{ validcomment.urlImg }}); background-repeat: no-repeat; background-size: 100%; background-position:center;"><a href="{{ session.routes.post }}{{ validcomment.postId }}">{{ validcomment.postTitle }}</a></td>
-                        <td class="tableResults">{{ username }}</td>
+                        <td class="tableResults">{{ validcomment.userName }}</td>
                         <td class="tableResults">{{ validcomment.commentContent }}</td>
                         <td class="tableResults">{{ validcomment.commentDateFr }}</td>
                         <td class="tableResults">                         

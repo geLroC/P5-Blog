@@ -18,19 +18,28 @@ class UserController{
     function userIsActive(){
         getUserIsActive();
     }
-    function setUserAdmin($userId, $userIsAdmin){
-        global $twig;
-        die(var_dump($userId, $userIsAdmin));
+    function setUserAdmin($userId){
         $user = new UserManager();
-        $user->setAdmin($userId, $userIsAdmin);
-        echo $twig->render('userlist.twig', ['userlist'=>$list]);
-    }
-    function setUserActive($userId, $userIsActive){
-        global $twig;
-        $user = new UserManager();
-        $user->setActive($userId, $userIsActive);
+        $user->setAdmin($userId);
         header('Location:'.$_SESSION['routes']['userlist']);
-        //echo $twig->render('userlist.twig', ['userlist'=>$list]);
+    }   
+    
+    function unsetUserAdmin($userId){
+        $user = new UserManager();
+        $user->unsetAdmin($userId);
+        header('Location:'.$_SESSION['routes']['userlist']);
+    }
+
+
+    function setUserActive($userId){
+        $user = new UserManager();
+        $user->setActive($userId);
+        header('Location:'.$_SESSION['routes']['userlist']);
+    }
+    function setUserInactive($userId){
+        $user = new UserManager();
+        $user->setInactive($userId);
+        header('Location:'.$_SESSION['routes']['userlist']);
     }
     function deleteUser($userId){
         unset($_SESSION['tmp']);

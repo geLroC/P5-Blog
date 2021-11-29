@@ -31,28 +31,40 @@ class CommentController{
         global $router,$twig;
         $comments = new CommentManager();
         $commentList = $comments->getCommentList();
-        // Comptage du nombre de commentaires
+        //GETTING PENDING COMMENTS AUTHOR
+        foreach($commentList as $key=>$comment){
+            $user = new UserManager();
+            $userid = $comment['userId'];
+            $username = $user->getUsername($userid);
+            $comment['userName'] = $username;
+            $commentList[$key] = $comment;
+        }
+        //COUNTING PENDING COMMENTS
         $countPending = $comments->pendingCommentsCount();
-        // Récupération de l'auteur du commentaire
-        $user = new UserManager();
-        $userid = $commentList['userId'];
-        $username = $user->getUsername($userid);
         
-        //Preparing pagination
+        //PREPARING PAGINATION
         $commentsByPage = 10;
         $countValid = $comments->validCommentsCount();
         
-        $totalPages = ceil($countValid/$commentsByPage);
+        $totalPages = floor($countValid/$commentsByPage);
         $page = implode('',$page);
         if(!isset($page) || $page > $totalPages || $page <= 0){
             $page = 1;
             header('Location:'.$_SESSION['routes']['commentnumber'].$page);
         }
-        //Pagination is Ready
+        //PAGINATION READY
         $validCommentList = $comments->getPaginCommentList($page, $commentsByPage);
+        //GETTING VALID COMMENTS AUTHOR
+        foreach($validCommentList as $key=>$validComment){
+            $user = new UserManager();
+            $userid = $validComment['userId'];
+            $username = $user->getUsername($userid);
+            $validComment['userName'] = $username;
+            $validCommentList[$key] = $validComment;
+        }
 
 
-        echo $twig->render('commentlist.twig',array_merge(['countValid'=>$countValid],['countPending'=>$countPending], ['commentList'=>$commentList],['username'=>$username],['validCommentList'=>$validCommentList],['page'=>$page], ['commentsbypage'=>$commentsByPage], ['totalpages'=>$totalPages]));
+        echo $twig->render('commentlist.twig',array_merge(['countValid'=>$countValid],['countPending'=>$countPending], ['commentList'=>$commentList],['validCommentList'=>$validCommentList],['page'=>$page], ['commentsbypage'=>$commentsByPage], ['totalpages'=>$totalPages]));
     }
     
     public function deleteComment($commentId){

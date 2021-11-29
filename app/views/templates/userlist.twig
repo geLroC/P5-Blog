@@ -23,8 +23,8 @@
             <table >
                 <tr class="columnTitle">
                         <td>Actif</td>
-                        <td>Adresse email</td>
                         <td>Nom d'utilisateur</td>
+                        <td>Adresse email</td>
                         <td>Date d'inscription</td>
                         <td>Administrateur</td>
                         <td></td>
@@ -37,25 +37,81 @@
                         {% if user.userName != 'Utilisateur supprimé' %}
                         <td class="tableResults">
                             {% if user.userIsActive == 0 %}
-                                <a href="{{ session.routes.activateUser }}{{ user.userId }}1" type="submit" class="btn btn-sm btn-outline-success btn-admin">Oui</a>
-                                <a href="#" class="btn btn-sm btn-danger btn-admin">Non</a>
+                                <button class="btn btn-sm btn-outline-success btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#activateUser-{{ user.userId }}">Oui</button>
+                                <!-- activate user modal-->
+                                <div class="modal fade" id="activateUser-{{ user.userId }}" tabindex="-1" role="dialog" aria-labelledby="activateUserLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <p>Activer le compte utilisateur ?</p>
+                                                <form action="{{ session.routes.activateUser }}{{ user.userId }}" method="post">
+                                                    <a href="#" class="btn btn-sm btn-outline-warning btn-admin text-white">Annuler</a>
+                                                    <button type="submit" class="btn btn-sm btn-outline-success btn-admin text-white">Activer</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <a class="btn btn-sm btn-danger btn-admin">Non</a>
                             {% endif %}                           
                             {% if user.userIsActive == 1 %}
-                                <a href="#" class="btn btn-sm btn-success btn-admin">Oui</a>
-                                <a href="{{ session.routes.activateUser }}{{ user.userId }}0" type="submit" class="btn btn-sm btn-outline-danger btn-admin">Non</a>
+                                <a class="btn btn-sm btn-success btn-admin">Oui</a>
+                                <button class="btn btn-sm btn-outline-danger btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#deactivateUser-{{ user.userId }}">Non</button>
+                                <!-- deactivate user modal-->
+                                <div class="modal fade" id="deactivateUser-{{ user.userId }}" tabindex="-1" role="dialog" aria-labelledby="deactivateUserLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <p>Désactiver le compte utilisateur ?</p>
+                                                <form action="{{ session.routes.deactivateUser }}{{ user.userId }}" method="post">
+                                                    <a href="#" class="btn btn-sm btn-outline-warning btn-admin text-white">Annuler</a>
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-admin text-white">Désactiver</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             {% endif %}
                         </td>
-                        <td class="tableResults">{{ user.userMail }}</td>
                         <td class="tableResults">{{ user.userName }}</td>
+                        <td class="tableResults">{{ user.userMail }}</td>
                         <td class="tableResults">{{ user.userCreationDateFr }}</td> 
                         <td class="tableResults">
                             {% if user.userIsAdmin == 0 %}
-                                <a href="{{ session.routes.setUserAdmin }}{{ user.userId }}1" class="btn btn-sm btn-outline-success btn-admin">Oui</a>
-                                <a href="#" class="btn btn-sm btn-danger btn-admin">Non</a>
+                            <button class="btn btn-sm btn-outline-success btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#setUserAdmin-{{ user.userId }}">Oui</button>
+                            <!-- deactivate user modal-->
+                            <div class="modal fade" id="setUserAdmin-{{ user.userId }}" tabindex="-1" role="dialog" aria-labelledby="setUserAdminLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <p>Accorder les droits administrateur à cet utilisateur ?</p>
+                                            <form action="{{ session.routes.setUserAdmin }}{{ user.userId }}" method="post">
+                                                <a href="#" class="btn btn-sm btn-outline-warning btn-admin text-white">Annuler</a>
+                                                <button type="submit" class="btn btn-sm btn-outline-success btn-admin text-white">Accorder</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <a class="btn btn-sm btn-danger btn-admin">Non</a>
                             {% endif %}                           
                             {% if user.userIsAdmin == 1 %}
                                 <a href="#" class="btn btn-sm btn-success btn-admin">Oui</a>
-                                <a href="{{ session.routes.setUserAdmin }}{{ user.userId }}0" class="btn btn-sm btn-outline-danger btn-admin">Non</a>
+                                <button class="btn btn-sm btn-outline-danger btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#unsetUserAdmin-{{ user.userId }}">Non</button>
+                                <!-- unset admin modal-->
+                                <div class="modal fade" id="unsetUserAdmin-{{ user.userId }}" tabindex="-1" role="dialog" aria-labelledby="unsetUserAdminLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <p>Supprimer les droits administrateur de cet utilisateur ?</p>
+                                                <form action="{{ session.routes.unsetUserAdmin }}{{ user.userId }}" method="post">
+                                                    <a href="#" class="btn btn-sm btn-outline-warning btn-admin text-white">Annuler</a>
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-admin text-white">Supprimer les droits</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             {% endif %}</td>
                         <td>
                             <input type="hidden" name="userId" value="{{ user.userId }}">
@@ -63,16 +119,16 @@
                             <button class="btn btn-sm btn-danger btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#deleteUser-{{ user.userId }}">Supprimer l'utilisateur</button>
                             <!-- Delete user modal-->
                             <div class="modal fade" id="deleteUser-{{ user.userId }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserLabel" aria-hidden="true">
-                              <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                  <div class="modal-body">
-                                    <p>Supprimer le compte utilisateur ?</p>
-                                    <p class="smalltext">Cette action est irreversible</p>
-                                    <button type="button" class="btn btn-outline-primary text-white" data-bs-dismiss="modal">Annuler</button>
-                                    <a href="{{ session.routes.deleteUser}}{{ user.userId }}" type="submit" class="btn btn-outline-danger text-white">Supprimer</a>
-                                  </div>
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <p>Supprimer le compte utilisateur ?</p>
+                                            <p class="smalltext">Cette action est irreversible</p>
+                                            <button type="button" class="btn btn-outline-primary text-white" data-bs-dismiss="modal">Annuler</button>
+                                            <a href="{{ session.routes.deleteUser}}{{ user.userId }}" type="submit" class="btn btn-outline-danger text-white">Supprimer</a>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
                             </div>
                         </td>
                         {% endif %}
@@ -87,10 +143,10 @@
 
 {% if session.username is not defined or  session.userIsAdmin == 0 %}
     <header class="header">
-      <div class="container">
-          <h1 class="text-center text-danger text-uppercase mb-5">ACCÈS INTERDIT</h1>
-        <h2 class="text-center text-success "><a href="{{ session.routes.home }}">Retour à l'accueil</a></h2>
-      </div>
+        <div class="container">
+            <h1 class="text-center text-danger text-uppercase mb-5">ACCÈS INTERDIT</h1>
+            <h2 class="text-center text-success "><a href="{{ session.routes.home }}">Retour à l'accueil</a></h2>
+        </div>
     </header>
 {% endif %}
 

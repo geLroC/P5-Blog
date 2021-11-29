@@ -67,7 +67,6 @@ class CommentManager{
     }
 
     public function getPaginCommentList($page, $commentsByPage){
-        $nbcomments = self::validCommentsCount();
         $start = ($page-1)*$commentsByPage;
         $comment = DbConnect::connect()->query('SELECT c.commentId, c.userId AS userId, c.commentContent, c.pendingStatus, c.postId, DATE_FORMAT(commentDate, \'%d/%m/%Y à %Hh%i\') AS commentDateFr, p.postId, p.postTitle, p.urlImg 
         FROM comments c 
@@ -75,6 +74,7 @@ class CommentManager{
         ON c.postId = p.postId 
         ORDER BY commentDate DESC
         LIMIT '.$start.','.$commentsByPage);
-        return $comment;
+        $comments = $comment->fetchAll(PDO::FETCH_ASSOC);
+        return $comments;
     }
 }

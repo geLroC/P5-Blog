@@ -50,22 +50,35 @@ class UserManager{
     	return $userList;
     }
 
-    public function setAdmin($userId, $userIsAdmin){
+    public function setAdmin($userId){
 		$userId = implode($userId);
-		$userIsAdmin = implode($userIsAdmin);
     	$req = DbConnect::connect()->prepare('UPDATE user 
-		SET userIsAdmin = :userIsAdmin 
+		SET userIsAdmin = 1 
 		WHERE userId = :userId');
-    	$res = $req->execute(array("userId"=>$userId, "userIsAdmin"=>$userIsAdmin));
+    	$res = $req->execute(["userId"=>$userId]);
+    }
+	public function unsetAdmin($userId){
+		$userId = implode($userId);
+    	$req = DbConnect::connect()->prepare('UPDATE user 
+		SET userIsAdmin = 0 
+		WHERE userId = :userId');
+    	$res = $req->execute(["userId"=>$userId]);
     }
 
-    public function setActive($userId,$userIsActive){
-    	$userIsActive = implode($userIsActive);
+    public function setActive($userId){
     	$userId = implode($userId);
     	$req = DbConnect::connect()->prepare('UPDATE user 
-		SET userIsActive = :userIsActive 
+		SET userIsActive = 1 
 		WHERE userId = :userId');
-    	$res = $req->execute(["userId"=>$userId], ["userIsActive"=>$userIsActive]);
+    	$res = $req->execute(["userId"=>$userId]);
+    	return $res;
+    }    
+	public function setInactive($userId){
+    	$userId = implode($userId);
+    	$req = DbConnect::connect()->prepare('UPDATE user 
+		SET userIsActive = 0 
+		WHERE userId = :userId');
+    	$res = $req->execute(["userId"=>$userId]);
     	return $res;
     }
 

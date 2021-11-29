@@ -20,9 +20,10 @@ require 'vendor/autoload.php';
             //User managment
             ['GET', '/user/list', 'UserController#userList', 'userlist'],
             ['GET', '/user/list/delete-user/[:userId]', 'UserController#deleteUser', 'deleteUser'],
-            ['GET', '/user/list/admin/[:userId][:userIsAdmin]', 'UserController#setUserAdmin','setUserAdmin'],
-            ['GET', '/user/activate/user-[:userId][:userIsActive]', 'UserController#setUserActive', 'activateUser'],
-            ['POST', '/user/deactivate/user-[:userId]', 'UserController#setUserActive', 'deactivateUser'],
+            ['POST', '/user/admin/set/[:userId]', 'UserController#setUserAdmin','setUserAdmin'],
+            ['POST', '/user/admin/unset/[:userId]', 'UserController#unsetUserAdmin','unsetUserAdmin'],
+            ['POST', '/user/activate/[:userId]', 'UserController#setUserActive', 'activateUser'],
+            ['POST', '/user/deactivate/[:userId]', 'UserController#setUserInactive', 'deactivateUser'],
             ['GET', '/user/myaccount', 'UserController#myAccount', 'account'],
             ['POST', '/user/myaccount/editpassword/[:userId]', 'UserController#editPassword', 'passedit'],
 

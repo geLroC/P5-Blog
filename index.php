@@ -48,6 +48,7 @@ $_SESSION['routes'] = array_merge(
     ['userlist'=>$router->generate('userlist')],
     ['deleteUser'=>$router->generate('deleteUser')],
     ['setUserAdmin'=>$router->generate('setUserAdmin')],
+    ['unsetUserAdmin'=>$router->generate('unsetUserAdmin')],
     ['activateUser'=>$router->generate('activateUser')],
     ['deactivateUser'=>$router->generate('deactivateUser')],
     ['account'=>$router->generate('account')],
