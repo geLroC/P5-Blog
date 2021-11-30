@@ -5,43 +5,57 @@ require_once './app/class/User.php';
 
 class UserController{
 
-    function userList(){
+    public function userList($page){
         global $twig;
-        unset($_SESSION['tmp']);
-        $userList = new UserManager();
-        $list = $userList->getUserList();
-        echo $twig->render('userlist.twig', ['userlist'=>$list]);
+        
+        //Preparing pagination
+        $user = new userManager();
+        $usersByPage = 5;
+        $nbusers = $user->userCount();
+        $totalPages = ceil($nbusers/$usersByPage);
+        $page = implode($page);
+        if(!isset($page) || $page > $totalPages || $page <= 0){
+        $page = 1;
+        header('Location:'.$_SESSION['routes']['userlist'].$page);
+        }
+        //Pagination is Ready
+        $users = $user->getPaginUserList($page, $usersByPage);
+        echo $twig->render('userlist.twig', array_merge(['userlist'=>$users, 'page'=>$page, 'usersbypage'=>$usersByPage, 'totalpages'=>$totalPages]));
     }
-    function userIsAdmin(){
+
+    public function userIsAdmin(){
         getUserIsAdmin();
     }
-    function userIsActive(){
+
+    public function userIsActive(){
         getUserIsActive();
     }
-    function setUserAdmin($userId){
+    
+    public function setUserAdmin($userId){
         $user = new UserManager();
         $user->setAdmin($userId);
         header('Location:'.$_SESSION['routes']['userlist']);
     }   
     
-    function unsetUserAdmin($userId){
+    public function unsetUserAdmin($userId){
         $user = new UserManager();
         $user->unsetAdmin($userId);
         header('Location:'.$_SESSION['routes']['userlist']);
     }
 
-
-    function setUserActive($userId){
+    public function setUserActive($userId){
         $user = new UserManager();
         $user->setActive($userId);
         header('Location:'.$_SESSION['routes']['userlist']);
     }
-    function setUserInactive($userId){
+
+    public function setUserInactive($userId){
         $user = new UserManager();
         $user->setInactive($userId);
         header('Location:'.$_SESSION['routes']['userlist']);
     }
-    function deleteUser($userId){
+
+    public function deleteUser($userId){
         unset($_SESSION['tmp']);
         $user = new UserManager();
         $username = $user->getUsername(implode($userId));
@@ -49,14 +63,16 @@ class UserController{
         $user->userDelete($userId);
         header('Location:'.$_SESSION['routes']['userlist']);
     }
-    function myAccount(){
+
+    public function myAccount(){
         global $twig;
         unset($_SESSION['tmp']);
         $user = new UserManager();
         $currentUser = $user->getUserInfos($_SESSION['userId']);
         echo $twig->render('myaccount.twig', ['currentUser'=>$currentUser]);
     }
-    function editPassword($userId){
+
+    public function editPassword($userId){
         global $twig;
         unset($_SESSION['tmp']);
         $user = new UserManager();

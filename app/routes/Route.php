@@ -18,7 +18,7 @@ require 'vendor/autoload.php';
             ['GET', '/authentication/disconnect', 'AuthController#disconnect', 'disconnect'],
 
             //User managment
-            ['GET', '/user/list', 'UserController#userList', 'userlist'],
+            ['GET', '/user/list/page/[:page]', 'UserController#userList', 'userlist'],
             ['GET', '/user/list/delete-user/[:userId]', 'UserController#deleteUser', 'deleteUser'],
             ['POST', '/user/admin/set/[:userId]', 'UserController#setUserAdmin','setUserAdmin'],
             ['POST', '/user/admin/unset/[:userId]', 'UserController#unsetUserAdmin','unsetUserAdmin'],
@@ -31,6 +31,7 @@ require 'vendor/autoload.php';
             ['GET', '/blog', 'PostController#showPostList', 'postlist'],
             ['GET', '/blog/page/[:page]', 'PostController#showPostList', 'pagenumber'], 
             ['GET', '/blog/[:postId]', 'PostController#showPost', 'post'],
+            //['GET', '/blog/[:postId]/page/[:page]', 'PostController#showPost', 'post'],
 
             //Post managment
             ['GET', '/post/new', 'PostController#newPost', 'newpost'],

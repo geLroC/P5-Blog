@@ -112,9 +112,6 @@ class AuthController{
     public function disconnect(){
         //Unset session infos
         unset($_SESSION['username'], $_SESSION['userIsAdmin'], $_SESSION['userId']);
-        //$_SESSION = array();
-        //session_destroy();
-        
         //Redirecting user
         header('Location:'.$_SESSION['routes']['home']);
     }

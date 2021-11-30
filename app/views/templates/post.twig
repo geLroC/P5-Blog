@@ -113,14 +113,21 @@
                 </div>
             </div>
             {% endif %}
+            {% if not session.username %} 
+            <div class="row mt-2">
+                <div class="col-sm-12 col-lg-6">
+                    <h5 class="text-white"><a href="{{ session.routes.authentication }}">Connectez-vous</a> pour poster un commentaire.</h5>
+                </div>
+            </div>
+            {% endif %}
             {% for comment in comments %}
                 <div class="row m-2">
-                    <div class="col-sm-12 col-lg-6 postedcomment">
-                        {% if comment.pendingStatus == 0 %}
-                            <p class="author-date"><strong>{{ comment.userName }} </strong>, le {{ comment.commentDateFr }}</p>
-                            <p class="comment-content text-white">{{ comment.commentContent }}</p>
-                        {% endif %}
-                    </div>
+                    {% if comment.pendingStatus == 0 %}
+                        <div class="col-sm-12 col-lg-6 postedcomment pt-2">
+                            <p class="author-date"><strong>{{ comment.userName }}</strong>, le {{ comment.commentDateFr }}</p>
+                            <p class="comment-content text-white p-3">{{ comment.commentContent }}</p>
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

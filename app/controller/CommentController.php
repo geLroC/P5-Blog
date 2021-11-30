@@ -28,7 +28,7 @@ class CommentController{
     }
     
     public function commentList($page){
-        global $router,$twig;
+        global $twig;
         $comments = new CommentManager();
         $commentList = $comments->getCommentList();
         //GETTING PENDING COMMENTS AUTHOR

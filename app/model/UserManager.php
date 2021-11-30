@@ -47,7 +47,9 @@ class UserManager{
     	$userList = DbConnect::connect()->query('SELECT userId, userMail, userName, DATE_FORMAT(userCreationDate, \'%d/%m/%Y à %Hh%i\') AS userCreationDateFr, userIsAdmin, userIsActive 
 		FROM user 
 		ORDER BY userName');
-    	return $userList;
+		$users = $userList->fetchAll(PDO::FETCH_ASSOC);
+		die(var_dump($userList, $users));
+    	return $users;
     }
 
     public function setAdmin($userId){
@@ -147,5 +149,24 @@ class UserManager{
 		SET userPassword = :userPassword 
 		WHERE userId = :userId');
     	$req->execute(array('userPassword'=>$userpassword, 'userId'=>$userId));
-    }    
+    }
+
+	public function getPaginUserList($page, $usersByPage){
+		$user = self::userCount();
+		$start = ($page-1)*$usersByPage;
+		$userList = DbConnect::connect()->query('SELECT userId, userMail, userName, DATE_FORMAT(userCreationDate, \'%d/%m/%Y à %Hh%i\') AS userCreationDateFr, userIsAdmin, userIsActive 
+		FROM user 
+		WHERE userName != "Utilisateur supprimé"
+		ORDER BY userName ASC
+		LIMIT '.$start.','.$usersByPage);
+		$users = $userList->fetchAll(PDO::FETCH_ASSOC);
+		return $users;
+	}
+
+	public function userCount(){
+		$userCount = DbConnect::connect()->query('SELECT userId FROM user WHERE userName != "Utilisateur supprimé"');
+		$res = $userCount->rowCount();
+		return $res;
+	}
+
 }

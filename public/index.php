@@ -1,7 +1,5 @@
 <?php 
-if (!isset($_SESSION['username']))  {
-    session_start();
-}
+    session_start(); 
 
 //autoload
 require '../vendor/autoload.php';
@@ -23,7 +21,7 @@ $twig->addExtension(new \Twig\Extension\DebugExtension());
 
 
 
-//ALTOROUTER
+//ALTOROUTER SETUP
 $router = new AltoRouter();
 $data = require '../app/config/routerconfig.php';
 

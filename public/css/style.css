@@ -11331,11 +11331,12 @@ html {
 .blog .blog-item {
   position: relative;
   display: inline-block;
-  max-width: 25rem;
+  max-width: 100%;
   border-radius: 0.1rem;
   overflow: hidden;
   box-shadow: 0px 3px 8px;
-  height: 450px;
+  height: 100%;
+  width : 100%;
 }
 .blog .blog-item .img-fluid{
   border-bottom: solid #29343E;
@@ -11431,8 +11432,9 @@ text-shadow: 0px 0px 3px greenyellow;
   font-family: "Montserrat", Segoe UI;
 }
 
-#comments .postedcomment{
-  border-radius: 3px;
+.postedcomment .comment-content{
+  background-color: rgba(91, 166, 255, .2);
+  border-radius: 2%;
 }
 
 #edit-form .form-control{

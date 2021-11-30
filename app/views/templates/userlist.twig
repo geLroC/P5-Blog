@@ -31,8 +31,8 @@
                     </tr>
                 {% for user in userlist %}
                     <tr>
-                        {% if user.userName == 'Utilisateur supprimé' and user.userIsActive == 0 %}
-                        {% endif %}
+                        {#{% if user.userName == 'Utilisateur supprimé' and user.userIsActive == 0 %}#}
+                        {#{% endif %}#}
 
                         {% if user.userName != 'Utilisateur supprimé' %}
                         <td class="tableResults">
@@ -136,6 +136,26 @@
                 {% endfor %}
 
             </table>
+        </div>
+        <div class="row text-white text-center mt-3 mb-0">
+          <div class="col-12">
+            <nav>
+              <ul class="pagination">
+                {% for i in 1.. totalpages %}
+                    {% if i == page %}
+                        <li class="page-item active">
+                            <p class="page-link">{{ i }}</p>
+                        </li>
+                    {% endif %}
+                    {% if i != page %}
+                        <li class="page-item">
+                            <a href="{{ session.routes.userlist}}{{ i }}" class="page-link"> {{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+              </nav>
+          </div>
         </div>
     </div>
 </section>

@@ -9,9 +9,8 @@ class PostController{
         global $twig;
         $_SESSION['tmp']= [];
         $post = new PostManager();
-        $id = implode('', $postId);
+        $id = implode($postId);
         $currentPost = $post->getPost($postId);
-
         $comments = new CommentManager();
         $comment = $comments->getComments($postId);
         echo $twig->render('post.twig', array_merge(['currentPost'=>$currentPost, 'comments'=>$comment]));
@@ -25,7 +24,7 @@ class PostController{
         $postsByPage = 6;
         $nbposts = $post->postCount();
         $totalPages = ceil($nbposts/$postsByPage);
-        $page = implode('',$page);
+        $page = implode($page);
         if(!isset($page) || $page > $totalPages || $page <= 0){
           $page = 1;
           header('Location:'.$_SESSION['routes']['pagenumber'].$page);
