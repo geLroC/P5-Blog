@@ -13,7 +13,7 @@ class CommentController{
         $commentContent = $_POST['comment'];
         $comment = new CommentManager();
     
-        //Check if all fields are completed
+        //CHECKING IF ALL FIELDS ARE COMPLETED
         if(empty($_POST['comment'])){
             $commentErrors = "Votre commentaire est vide, impossible de l'enregistrer.";
         }
@@ -62,8 +62,6 @@ class CommentController{
             $validComment['userName'] = $username;
             $validCommentList[$key] = $validComment;
         }
-
-
         echo $twig->render('commentlist.twig',array_merge(['countValid'=>$countValid],['countPending'=>$countPending], ['commentList'=>$commentList],['validCommentList'=>$validCommentList],['page'=>$page], ['commentsbypage'=>$commentsByPage], ['totalpages'=>$totalPages]));
     }
     
@@ -84,9 +82,5 @@ class CommentController{
         $link = $router->generate('commentlist');
         header('Location:'.$link);
     }
-    
-    public function countPending(){
-        pendingCommentsCount();
-    }
-    
+        
 }

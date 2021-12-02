@@ -1,7 +1,6 @@
 <?php
 
 require_once './app/model/UserManager.php';
-require_once './app/class/User.php';
 
 class UserController{
 
@@ -23,13 +22,13 @@ class UserController{
         echo $twig->render('userlist.twig', array_merge(['userlist'=>$users, 'page'=>$page, 'usersbypage'=>$usersByPage, 'totalpages'=>$totalPages]));
     }
 
-    public function userIsAdmin(){
-        getUserIsAdmin();
-    }
+    //public function userIsAdmin(){
+    //    getUserIsAdmin();
+    //}
 
-    public function userIsActive(){
-        getUserIsActive();
-    }
+    //public function userIsActive(){
+    //    getUserIsActive();
+    //}
     
     public function setUserAdmin($userId){
         $user = new UserManager();

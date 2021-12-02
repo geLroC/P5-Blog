@@ -5,7 +5,9 @@ class UserManager{
 
     public function getUserIsAdmin(){
     	$username = $_POST['username'];
-    	$req = DbConnect::connect()->prepare('SELECT userIsAdmin FROM user WHERE userName = ?');
+    	$req = DbConnect::connect()->prepare('SELECT userIsAdmin 
+		FROM user 
+		WHERE userName = ?');
     	$req->execute([$username]);
     	$res = $req->fetchColumn();
     	return $res;
@@ -13,7 +15,9 @@ class UserManager{
 
     public function getUserIsActive(){
 		$username = $_POST['username'];
-    	$req = DbConnect::connect()->prepare('SELECT userIsActive FROM user WHERE userName = ?');
+    	$req = DbConnect::connect()->prepare('SELECT userIsActive 
+		FROM user 
+		WHERE userName = ?');
     	$req->execute([$username]);
     	$res = $req->fetchColumn();
     	return $res;
@@ -21,14 +25,18 @@ class UserManager{
 
     public function getUserId($username){
     	$username = $_POST['username'];
-    	$req = DbConnect::connect()->prepare('SELECT userId FROM user WHERE userName = ?');
+    	$req = DbConnect::connect()->prepare('SELECT userId 
+		FROM user 
+		WHERE userName = ?');
     	$req->execute([$username]);
     	$res = $req->fetchColumn();
     	return $res;
     }
 
     public function getUsername($userid){
-		$req = DbConnect::connect()->prepare('SELECT userName FROM user WHERE userId = ?');
+		$req = DbConnect::connect()->prepare('SELECT userName 
+		FROM user 
+		WHERE userId = ?');
     	$req->execute([$userid]);
     	$res = $req->fetchColumn();
     	return $res;
@@ -59,6 +67,7 @@ class UserManager{
 		WHERE userId = :userId');
     	$res = $req->execute(["userId"=>$userId]);
     }
+
 	public function unsetAdmin($userId){
 		$userId = implode($userId);
     	$req = DbConnect::connect()->prepare('UPDATE user 
@@ -75,6 +84,7 @@ class UserManager{
     	$res = $req->execute(["userId"=>$userId]);
     	return $res;
     }    
+
 	public function setInactive($userId){
     	$userId = implode($userId);
     	$req = DbConnect::connect()->prepare('UPDATE user 
@@ -164,7 +174,9 @@ class UserManager{
 	}
 
 	public function userCount(){
-		$userCount = DbConnect::connect()->query('SELECT userId FROM user WHERE userName != "Utilisateur supprimé"');
+		$userCount = DbConnect::connect()->query('SELECT userId 
+		FROM user 
+		WHERE userName != "Utilisateur supprimé"');
 		$res = $userCount->rowCount();
 		return $res;
 	}

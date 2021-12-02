@@ -9,7 +9,7 @@
 	class FrontController{
 			
 		public function index(){
-			global $router, $twig;
+			global $twig;
 			$post = new PostManager();
 			$postList = $post->getPosts();
 			echo $twig->render('home.twig', ['posts' => $postList]);

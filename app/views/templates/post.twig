@@ -73,7 +73,12 @@
     {% endif %}
     <section class="page-section-comment" id="comments">
         <div class="container comments mb-5 mt-3 p-2" >
-            <h3 class="text-uppercase text-white mb-0">Commentaires</h3>
+            {% if nbcomments == 0 %}
+                <h3 class="text-uppercase text-white mb-0">Pas de commentaire</h3>
+            {% endif %}
+            {% if nbcomments > 0 %}
+                <h3 class="text-uppercase text-white mb-0">Commentaires</h3>
+            {% endif %}
             <div class="row text-center mt-5">
 
             {% if session.tmp.commentError %}
@@ -124,12 +129,35 @@
                 <div class="row m-2">
                     {% if comment.pendingStatus == 0 %}
                         <div class="col-sm-12 col-lg-6 postedcomment pt-2">
-                            <p class="author-date"><strong>{{ comment.userName }}</strong>, le {{ comment.commentDateFr }}</p>
+                            <p class="author-date">{{ comment.userName }}, le {{ comment.commentDateFr }}</p>
                             <p class="comment-content text-white p-3">{{ comment.commentContent }}</p>
                         </div>
                     {% endif %}
                 </div>
             {% endfor %}
+            <div class="row text-white text-center mt-3 mb-0">
+            {% if nbcomments > 6 %}
+          <div class="col-12">
+            <nav>
+              <ul class="pagination">
+                {% for i in 1.. totalpages %}
+                    {% if i == page %}
+                        <li class="page-item active">
+                            <p class="page-link">{{ i }}</p>
+                        </li>
+                    {% endif %}
+                    {% if i != page %}
+                        <li class="page-item">
+                            <a href="{{ session.routes.post}}{{ currentPost.postId }}/page/{{ i }}#comments" class="page-link"> {{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+              </nav>
+          </div>
+          {% endif %}
+        </div>
+      </div>
         </div>
     </section>
 

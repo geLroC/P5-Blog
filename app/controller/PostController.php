@@ -5,15 +5,47 @@ require_once './app/model/CommentManager.php';
 
 class PostController{
 
-    public function showPost($postId){
+    public function showPost($params){
         global $twig;
         $_SESSION['tmp']= [];
+        $params = implode('/', $params);
+        $params = explode('/', $params);
+        $postId = $params[0];
+
+        //GET POST
         $post = new PostManager();
-        $id = implode($postId);
         $currentPost = $post->getPost($postId);
+        //PAGIN COMMENTS
         $comments = new CommentManager();
-        $comment = $comments->getComments($postId);
-        echo $twig->render('post.twig', array_merge(['currentPost'=>$currentPost, 'comments'=>$comment]));
+        $commentsByPage = 6;
+        $nbcomments = $comments->getComments($postId)->rowCount();
+        $totalPages = ceil($nbcomments/$commentsByPage);
+        // IF POST HAS > 6 COMMENTS -- USER PAGINATION
+        if($nbcomments > 6){
+            $page = $params[2];
+            if(!isset($page) || $page > $totalPages || $page <= 0){
+                $page = 1;
+                header('Location:'.$_SESSION['routes']['post'].$postId.'/page/'.$page);
+            }
+            //PAGINATION READY - FETCHING COMMENT LIST
+            $comment = $comments->getPaginCommentList($page, $commentsByPage);
+            //FETCHING COMMENT AUTHOR
+            foreach($comment as $key=>$comments){
+                $user = new UserManager();
+                $userid = $comments['userId'];
+                $username = $user->getUsername($userid);
+                $comments['userName'] = $username;
+                $comment[$key] = $comments;
+            }
+            //ALL SET -- RENDERING VIEW
+            echo $twig->render('post.twig', array_merge(['currentPost'=>$currentPost,'comments'=>$comment, 'page'=>$page, 'commentsbypage'=>$commentsByPage, 'totalpages'=>$totalPages, 'nbcomments'=>$nbcomments]));
+        }
+        //IF POST HAS < 6 COMMENTS -- PAGINATION NOT NEEDED
+        else{
+            $comments = new CommentManager();
+            $comment = $comments->getComments($postId);
+            echo $twig->render('post.twig', array_merge(['currentPost'=>$currentPost, 'comments'=>$comment, 'nbcomments'=>$nbcomments]));
+        }
     }
 
     public function showPostList($page){
@@ -26,8 +58,8 @@ class PostController{
         $totalPages = ceil($nbposts/$postsByPage);
         $page = implode($page);
         if(!isset($page) || $page > $totalPages || $page <= 0){
-          $page = 1;
-          header('Location:'.$_SESSION['routes']['pagenumber'].$page);
+            $page = 1;
+            header('Location:'.$_SESSION['routes']['pagenumber'].$page);
         }
         //Pagination is Ready
         $posts = $post->getPaginPosts($page, $postsByPage);
@@ -123,7 +155,6 @@ class PostController{
         $post->postDelete($postId);
         $link = $router->generate('postlist');
         header('Location:'.$link);
-
     }
 
     public function postEdit($postId){

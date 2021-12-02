@@ -29,9 +29,8 @@ require 'vendor/autoload.php';
 
             //Blog
             ['GET', '/blog', 'PostController#showPostList', 'postlist'],
-            ['GET', '/blog/page/[:page]', 'PostController#showPostList', 'pagenumber'], 
-            ['GET', '/blog/[:postId]', 'PostController#showPost', 'post'],
-            //['GET', '/blog/[:postId]/page/[:page]', 'PostController#showPost', 'post'],
+            ['GET', '/blog/page/[:page]', 'PostController#showPostList', 'pagenumber'],
+            ['GET', '/blog/[**:params]', 'PostController#showPost', 'post'],
 
             //Post managment
             ['GET', '/post/new', 'PostController#newPost', 'newpost'],

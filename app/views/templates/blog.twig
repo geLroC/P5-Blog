@@ -12,8 +12,7 @@
     </header>
 
     <section class="page-section blog" id="blog">
-      <div class="container d-flex align-items-center flex-column">
-        
+        <div class="container d-flex align-items-center flex-column">
         <!-- Blog Grid Items-->
         <div class="row justify-content-center mt-5">
 
@@ -46,11 +45,8 @@
                             <p>{{ post.postLede }}</p>
                         </div>
                     </a>
-                </div>
-                
-                {% if session.username %}
                     {% if session.userIsAdmin == 1 %}
-                        <div class="text-center m-2">
+                        <div class="text-center mt-0">
                             <a href="{{ session.routes.editpost }}{{ post.postId }}" type="button" class="btn btn-outline-warning btn-sm text-white bt-admin" type="submit">Modifier l'article</a>
                             
                             <button class="btn btn-outline-danger btn-sm text-white btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#deletePost-{{ post.postId }}">Supprimer</button>
@@ -68,7 +64,8 @@
                             </div>
                         </div>
                     {% endif %}
-                {% endif %}
+                </div>
+                
             </div>
             {% endfor %}
         </div>
@@ -89,9 +86,9 @@
                     {% endif %}
                 {% endfor %}
                 </ul>
-              </nav>
-          </div>
+                </nav>
+            </div>
         </div>
-      </div>
+        </div>
     </section>
 {% endblock content%}

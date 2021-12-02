@@ -13,7 +13,7 @@ class AuthController{
     public function userLogin(){
         $loginErrors = [];
         $loginSuccess = [];
-        // Checking inputs
+        // CHECKING INPUTS
         if (!isset($_POST['username']) || empty ($_POST['username']))
         {
             $loginErrors[] = "Merci de renseigner votre nom d'utilisateur.";
@@ -23,7 +23,7 @@ class AuthController{
             $loginErrors[] = "Merci de renseigner votre mot de passe.";
         }
     
-        //no input errors, checking values
+        //NO INPUT ERRORS -- CHECKING VALUES
         if (empty ($loginErrors)) {	
             $user = new UserManager();
             $username = $_POST['username'];
@@ -58,7 +58,7 @@ class AuthController{
     public function userRegister(){
         $registerErrors = [];
         $registerSuccess = [];
-        //Checking inputs
+        //CHECKING INPUTS
         if (!isset($_POST['usermail']) || empty ($_POST['usermail'])){
             $registerErrors[] = "Merci de renseigner votre email.";
         }
@@ -73,7 +73,7 @@ class AuthController{
         }
         
 
-        //No errors, checking inputs values
+        //NO ERRORS -- CHECKING INPUTS VALUES
         if (empty($registerErrors)){
             
             $user = new UserManager();
@@ -98,7 +98,7 @@ class AuthController{
             if (!$checkPasswords){
                 $registerErrors[] = "Les mots de passes ne correspondent pas, vérifiez vos entrées.";
             }
-            //All inputs are valid, insertion into DB
+            //ALL INPUTS ARE VALID -- INSERT INTO DB 
             if (!$checkUsername && !$checkUsermail && $checkPasswords && $validUsermail){
                 $passwordHash = sha1($password);
                 $user->registerUser($usermail, $username, $passwordHash);
@@ -110,9 +110,9 @@ class AuthController{
     }
 
     public function disconnect(){
-        //Unset session infos
+        //UNSET SESSION INFOS
         unset($_SESSION['username'], $_SESSION['userIsAdmin'], $_SESSION['userId']);
-        //Redirecting user
+        //REDIRECTING USER
         header('Location:'.$_SESSION['routes']['home']);
     }
 }

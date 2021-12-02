@@ -27,8 +27,8 @@ class PostManager{
 	    INNER JOIN user u 
 	    ON p.userId = u.userId
 	    WHERE postId = ?');
-        $id = implode($postId);
-	    $req->execute([$id]);
+        //$id = implode($postId);
+	    $req->execute([$postId]);
 	    $post=$req->fetch();
 
 	    return $post;
@@ -50,29 +50,37 @@ class PostManager{
     }
 
     public function addPost($title, $lede, $content, $postAuthor, $file){
-        $req = DbConnect::connect()->prepare('INSERT INTO post(postTitle, postLede, postContent, userId, urlImg) VALUES (:postTitle, :postLede, :postContent, :userid, :urlImg)');
+        $req = DbConnect::connect()->prepare('INSERT INTO post(postTitle, postLede, postContent, userId, urlImg) 
+        VALUES (:postTitle, :postLede, :postContent, :userid, :urlImg)');
         $req->execute(array('postTitle'=>$title, 'postLede'=>$lede, 'postContent'=>$content, 'userid'=>$postAuthor, 'urlImg'=>$file));
     }
 
     public function editPost($title, $lede, $content, $file, $postId){
         $id = implode('',$postId);
         //DELETE OLD IMG FROM DIR
-        $deleteImg = DbConnect::connect()->prepare('SELECT urlImg FROM post where postId = ?');
+        $deleteImg = DbConnect::connect()->prepare('SELECT urlImg 
+        FROM post 
+        WHERE postId = ?');
         $deleteImg->execute([$id]);
         $img = $deleteImg->fetchColumn();
         unlink('public/images/blog/'.$img);
-        $req = DbConnect::connect()->prepare('UPDATE post SET postTitle = :postTitle, postLede = :postLede, postContent = :postContent, urlImg = :urlImg WHERE postId = :postId');
+        $req = DbConnect::connect()->prepare('UPDATE post 
+        SET postTitle = :postTitle, postLede = :postLede, postContent = :postContent, urlImg = :urlImg 
+        WHERE postId = :postId');
         $req->execute(array('postTitle'=>$title, 'postLede'=>$lede, 'postContent'=>$content, 'urlImg'=>$file, 'postId' => $id));
     }
 
     public function editPostNoPic($title, $lede, $content, $postId){
         $postId = implode('',$postId);
-        $req = DbConnect::connect()->prepare('UPDATE post SET postTitle = :postTitle, postLede = :postLede, postContent = :postContent WHERE postId = :postid');
+        $req = DbConnect::connect()->prepare('UPDATE post 
+        SET postTitle = :postTitle, postLede = :postLede, postContent = :postContent 
+        WHERE postId = :postid');
         $req->execute(array('postTitle'=>$title, 'postLede'=>$lede, 'postContent'=>$content, 'postid' => $postId));
     }
 
     public function postCount(){
-        $postCount = DbConnect::connect()->query('SELECT postId FROM post');
+        $postCount = DbConnect::connect()->query('SELECT postId 
+        FROM post');
         $res = $postCount->rowCount();
         return $res;
     }
