@@ -127,12 +127,14 @@
             {% endif %}
             {% for comment in comments %}
                 <div class="row m-2">
-                    {% if comment.pendingStatus == 0 %}
-                        <div class="col-sm-12 col-lg-6 postedcomment pt-2">
-                            <p class="author-date">{{ comment.userName }}, le {{ comment.commentDateFr }}</p>
-                            <p class="comment-content text-white p-3">{{ comment.commentContent }}</p>
-                        </div>
-                    {% endif %}
+                    <div class="col-12">
+                        {% if comment.pendingStatus == 0 %}
+                            <div class="col-sm-12 col-lg-6 postedcomment pt-2">
+                                <p class="author-date">{{ comment.userName }}, le {{ comment.commentDateFr }}</p>
+                                <p class="comment-content text-white p-3">{{ comment.commentContent }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
             <div class="row text-white text-center mt-3 mb-0">

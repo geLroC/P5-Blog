@@ -20,7 +20,7 @@ class PostController{
         $commentsByPage = 6;
         $nbcomments = $comments->getComments($postId)->rowCount();
         $totalPages = ceil($nbcomments/$commentsByPage);
-        // IF POST HAS > 6 COMMENTS -- USER PAGINATION
+        // IF POST HAS > 6 COMMENTS -- USE PAGINATION
         if($nbcomments > 6){
             $page = $params[2];
             if(!isset($page) || $page > $totalPages || $page <= 0){

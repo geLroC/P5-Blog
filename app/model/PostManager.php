@@ -27,7 +27,9 @@ class PostManager{
 	    INNER JOIN user u 
 	    ON p.userId = u.userId
 	    WHERE postId = ?');
-        //$id = implode($postId);
+        if (is_array($postId)){
+            $postId = implode($postId);
+        }
 	    $req->execute([$postId]);
 	    $post=$req->fetch();
 

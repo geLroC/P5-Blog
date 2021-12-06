@@ -45,8 +45,7 @@ class CommentController{
         //PREPARING PAGINATION
         $commentsByPage = 10;
         $countValid = $comments->validCommentsCount();
-        
-        $totalPages = floor($countValid/$commentsByPage);
+        $totalPages = ceil($countValid/$commentsByPage);
         $page = implode('',$page);
         if(!isset($page) || $page > $totalPages || $page <= 0){
             $page = 1;

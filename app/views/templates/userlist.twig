@@ -31,9 +31,6 @@
                     </tr>
                 {% for user in userlist %}
                     <tr>
-                        {#{% if user.userName == 'Utilisateur supprimé' and user.userIsActive == 0 %}#}
-                        {#{% endif %}#}
-
                         {% if user.userName != 'Utilisateur supprimé' %}
                         <td class="tableResults">
                             {% if user.userIsActive == 0 %}

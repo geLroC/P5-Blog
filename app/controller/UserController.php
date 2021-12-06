@@ -14,44 +14,47 @@ class UserController{
         $totalPages = ceil($nbusers/$usersByPage);
         $page = implode($page);
         if(!isset($page) || $page > $totalPages || $page <= 0){
-        $page = 1;
-        header('Location:'.$_SESSION['routes']['userlist'].$page);
+            $page = 1;
+            header('Location:'.$_SESSION['routes']['userlist'].$page);
         }
         //Pagination is Ready
         $users = $user->getPaginUserList($page, $usersByPage);
         echo $twig->render('userlist.twig', array_merge(['userlist'=>$users, 'page'=>$page, 'usersbypage'=>$usersByPage, 'totalpages'=>$totalPages]));
     }
-
-    //public function userIsAdmin(){
-    //    getUserIsAdmin();
-    //}
-
-    //public function userIsActive(){
-    //    getUserIsActive();
-    //}
-    
     public function setUserAdmin($userId){
+        unset($_SESSION['tmp']);
         $user = new UserManager();
         $user->setAdmin($userId);
-        header('Location:'.$_SESSION['routes']['userlist']);
+        $username = $user->getUsername(implode($userId));
+        $_SESSION['tmp'] = 'Les droits administrateur ont été accordés à <strong>'.$username.'</strong>.';
+        header('Location:'.$_SESSION['routes']['userlist'].'1');
     }   
     
     public function unsetUserAdmin($userId){
+        unset($_SESSION['tmp']);
         $user = new UserManager();
         $user->unsetAdmin($userId);
-        header('Location:'.$_SESSION['routes']['userlist']);
+        $username = $user->getUsername(implode($userId));
+        $_SESSION['tmp'] = 'Les droits administrateur de <strong>'.$username.'</strong> ont été révoqués';
+        header('Location:'.$_SESSION['routes']['userlist'].'1');
     }
 
     public function setUserActive($userId){
+        unset($_SESSION['tmp']);
         $user = new UserManager();
         $user->setActive($userId);
-        header('Location:'.$_SESSION['routes']['userlist']);
+        $username = $user->getUsername(implode($userId));
+        $_SESSION['tmp'] = 'L\'utilisateur <strong>'.$username.'</strong> a été activé';
+        header('Location:'.$_SESSION['routes']['userlist'].'1');
     }
 
     public function setUserInactive($userId){
+        unset($_SESSION['tmp']);
         $user = new UserManager();
         $user->setInactive($userId);
-        header('Location:'.$_SESSION['routes']['userlist']);
+        $username = $user->getUsername(implode($userId));
+        $_SESSION['tmp'] = 'L\'utilisateur <strong>'.$username.'</strong> a été désactivé';
+        header('Location:'.$_SESSION['routes']['userlist'].'1');
     }
 
     public function deleteUser($userId){
@@ -114,4 +117,13 @@ class UserController{
         }
         header('Location:'.$_SESSION['routes']['account']);
     }
+
+    public function userIsAdmin(){
+        getUserIsAdmin();
+    }
+
+    public function userIsActive(){
+        getUserIsActive();
+    }
+    
 }
