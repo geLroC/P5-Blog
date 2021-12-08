@@ -51,15 +51,6 @@ class UserManager{
     	return $res;
     }
 
-    public function getUserList(){
-    	$userList = DbConnect::connect()->query('SELECT userId, userMail, userName, DATE_FORMAT(userCreationDate, \'%d/%m/%Y à %Hh%i\') AS userCreationDateFr, userIsAdmin, userIsActive 
-		FROM user 
-		ORDER BY userName');
-		$users = $userList->fetchAll(PDO::FETCH_ASSOC);
-		die(var_dump($userList, $users));
-    	return $users;
-    }
-
     public function setAdmin($userId){
 		$userId = implode($userId);
     	$req = DbConnect::connect()->prepare('UPDATE user 
@@ -105,7 +96,7 @@ class UserManager{
     public function registerUser($usermail, $username, $password){
     	$req = DbConnect::connect()->prepare('INSERT INTO user(userMail, userName, userPassword, userIsActive) 
 		VALUES (:usermail, :username, :password, 1)');
-    	$req->execute(array('usermail' => $usermail, 'username' => $username, 'password' => $password));
+    	$req->execute(['usermail' => $usermail, 'username' => $username, 'password' => $password]);
     }
 
     public function checkUsername($username){
@@ -148,8 +139,8 @@ class UserManager{
 			return $userOK = false;
 		}
 		else{
-    	$userOK = ($username === $res['userName'] && $password === $res['userPassword']);
-    	return $userOK;
+    		$userOK = ($username === $res['userName'] && $password === $res['userPassword']);
+    		return $userOK;
 		}
     }
 
@@ -158,7 +149,7 @@ class UserManager{
     	$req = DbConnect::connect()->prepare('UPDATE user 
 		SET userPassword = :userPassword 
 		WHERE userId = :userId');
-    	$req->execute(array('userPassword'=>$userpassword, 'userId'=>$userId));
+    	$req->execute(['userPassword'=>$userpassword, 'userId'=>$userId]);
     }
 
 	public function getPaginUserList($page, $usersByPage){

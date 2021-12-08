@@ -1,13 +1,10 @@
 {% extends 'layout.twig' %}
 
-{#
-{% if currentUser.userId %}
-#}
+{% block content %}   
     {% block pagetitle %}
         <title>Mon compte - {{ currentUser.userName }}</title>
     {% endblock %}
-
-    {% block content %}    
+ 
         <header class="header bg-primary">
             <div class="container-fluid d-flex flex-column text-white text-uppercase text-center">
                 <h2>{{ currentUser.userName}}</h2>
@@ -63,10 +60,4 @@
                     </div>
             </div>
         </section>
-    {% endblock %}
-{#
-{% endif %}
-{% if not currentUser.userId %}
-    {% do redirect({{ redirection }}) %}
-{% endif %}
-#}
+{% endblock %}

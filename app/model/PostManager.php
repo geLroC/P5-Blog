@@ -59,6 +59,7 @@ class PostManager{
 
     public function editPost($title, $lede, $content, $file, $postId){
         $id = implode('',$postId);
+
         //DELETE OLD IMG FROM DIR
         $deleteImg = DbConnect::connect()->prepare('SELECT urlImg 
         FROM post 
@@ -66,6 +67,7 @@ class PostManager{
         $deleteImg->execute([$id]);
         $img = $deleteImg->fetchColumn();
         unlink('public/images/blog/'.$img);
+
         $req = DbConnect::connect()->prepare('UPDATE post 
         SET postTitle = :postTitle, postLede = :postLede, postContent = :postContent, urlImg = :urlImg 
         WHERE postId = :postId');
@@ -73,7 +75,7 @@ class PostManager{
     }
 
     public function editPostNoPic($title, $lede, $content, $postId){
-        $postId = implode('',$postId);
+        $postId = implode($postId);
         $req = DbConnect::connect()->prepare('UPDATE post 
         SET postTitle = :postTitle, postLede = :postLede, postContent = :postContent 
         WHERE postId = :postid');

@@ -8,6 +8,7 @@ class PostController{
     public function showPost($params){
         global $twig;
         $_SESSION['tmp']= [];
+        //EXPLODE URI PARAMS
         $params = implode('/', $params);
         $params = explode('/', $params);
         $postId = $params[0];
@@ -51,7 +52,7 @@ class PostController{
     public function showPostList($page){
         global $twig;
 
-        //Preparing pagination
+        //PREPARING PAGINATION
         $post = new PostManager();
         $postsByPage = 6;
         $nbposts = $post->postCount();
@@ -61,7 +62,7 @@ class PostController{
             $page = 1;
             header('Location:'.$_SESSION['routes']['pagenumber'].$page);
         }
-        //Pagination is Ready
+        //PAGINATION IS READY
         $posts = $post->getPaginPosts($page, $postsByPage);
         echo $twig->render('blog.twig', array_merge(['posts'=>$posts, 'page'=>$page, 'postsbypage'=>$postsByPage, 'totalpages'=>$totalPages]));
     }
@@ -77,7 +78,7 @@ class PostController{
         $content = $_POST['content'];
         $ledeLength = strlen($_POST['lede']);
     
-        //Check if all fields are completed
+        //CHECKING IF ALL FIELDS ARE COMPLETED
         if(!isset($_POST['title']) || empty($_POST['title'])){
             $postErrors[] = "Merci de renseigner le titre de l'article";
         }
@@ -100,31 +101,31 @@ class PostController{
                 $postSuccess = "L'article ".$title." a bien été modifié.";
             }
             else{
-                //Set file variables
+                //SETTING FILE VARIABLES
                 $tmpName = $_FILES['image']['tmp_name'];
                 $name = $_FILES['image']['name'];
                 $size = $_FILES['image']['size'];
                 $error = $_FILES['image']['error'];
     
-                //Get the file extension
+                //GETTING FILE EXTENSION
                 $setExtension = explode('.', $name);
                 $extension = strtolower(end($setExtension));
                 $extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
     
-                //Set the file size limit
+                //SETTING SIZE LIMIT
                 $maxSize = 10000000;
     
-                //if the file exceed the size limit
+                //CHECKING SIZE
                 if ($size >= $maxSize || $error == 1)
                 {
                     $fileErrors[] = "Le fichier est trop volumineux. Merci d'utiliser une image de moins de 10Mo";
                 }
-                //if the file has not a correct extension
+                //CHECKING FILE TYPE
                 if (!in_array($extension, $extensions))
                 {
                     $fileErrors[] = "Le format du fichier n'est pas autorisé. Merci d'utiliser une image *.jpg, *.jpeg, *.png, *.gif ou *.bmp";
                 }
-                //if there is an upload error
+                //CHECKING UPLOAD
                 if ($error != 0)
                 {
                     $fileErrors[] = "Une erreur est survenue";
@@ -178,7 +179,7 @@ class PostController{
         $postAuthor = $_SESSION['userId'];
 
 
-        //Check if all fields are completed
+        //CHECKING IF ALL FIELDS ARE COMPLETED
         if(!isset($title) || empty($title)){
             $postErrors[] = "Merci de renseigner le titre de l'article";
         }
@@ -198,31 +199,31 @@ class PostController{
     
         if(isset($postErrors) && empty($postErrors))
         {
-            //Set file variables
+            //SETTING FILE VARIABLES
             $tmpName = $_FILES['image']['tmp_name'];
             $name = $_FILES['image']['name'];
             $size = $_FILES['image']['size'];
             $error = $_FILES['image']['error'];
 
-            //Get the file extension
+            //GETTING FILE EXTENSION
             $setExtension = explode('.', $name);
             $extension = strtolower(end($setExtension));
             $extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
 
-            //Set the file size limit
+            //SETTING SIZE LIMIT
             $maxSize = 10000000;
 
-            //if the file exceed the size limit
+            //CHECKING SIZE
             if ($size >= $maxSize || $error == 1)
             {
                 $fileErrors[] = "Le fichier est trop volumineux. Merci d'utiliser une image de moins de 10Mo";
             }
-            //if the file has not a correct extension
+            //CHECKING FILE TYPE
             if (!in_array($extension, $extensions))
             {
                 $fileErrors[] = "Le format du fichier n'est pas autorisé. Merci d'utiliser une image *.jpg, *.jpeg, *.png, *.gif ou *.bmp";
             }
-            //if there is an upload error
+            //CHECKING UPLOAD
             if ($error != 0)
             {
                 $fileErrors[] = "Une erreur est survenue";

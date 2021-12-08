@@ -5,140 +5,141 @@
 {% endblock %}
 
 {% block content %}
-{% if session.username and session.userIsAdmin == 1 %}
-    <header class="header">
-    	<div class="container">
-    		<h1 class="text-center text-white text-uppercase mb-5">Gestion des commentaires</h1>
-    	</div>
-    </header>
-    <section class="page-section bg-primary">
-        <div class="container">
-            <div class="col-12 text-white mx-auto justify-content-center">
-                <h2>Commentaires en attente de validation</h2>
+    {% if session.username and session.userIsAdmin == 1 %}
+        <header class="header">
+        	<div class="container">
+        		<h1 class="text-center text-white text-uppercase mb-5">Gestion des commentaires</h1>
+        	</div>
+        </header>
+        <section class="page-section bg-primary">
+            <div class="container">
+                <div class="col-12 text-white mx-auto justify-content-center">
+                    <h2>Commentaires en attente de validation</h2>
+                        <table >
+                            <tr class="columnTitle">
+                                <th scope="col">Article</th>
+                                <th scope="col">Utilisateur</th>
+                                <th scope="col">Commentaire</th>
+                                <th scope="col">Posté le</th>
+                                <th scope="col">Pending</th>
+                            </tr>
+                            {% if countPending == 0 %}
+                                <tr>
+                                    <td colspan="5">Aucun commentaire en attente de validation.</td>
+                                </tr>
+                            {% endif %}
+                            {% if countPending > 0 %}
+                                {% for comments in commentList %}
+                                    <tr>
+                                        {% if comments.pendingStatus == 1 %}
+                                            <td class="tableResults" id="title" style="background-image: url(../../../public/images/blog/{{ comments.urlImg }}); background-repeat: no-repeat; background-size: 100%; background-position:center;"><a href="{{ session.routes.post }}{{ comments.postId }}">{{ comments.postTitle }}</a></td>
+                                            <td class="tableResults">{{ comments.userName }}</td>
+                                            <td class="tableResults">{{ comments.commentContent }}</td>
+                                            <td class="tableResults">{{ comments.commentDateFr }}</td>
+                                            <td class="tableResults">                         
+                                                <!-- Accept comment button -->
+                                                <button class="btn btn-sm btn-success btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#acceptComment{{ comments.commentId }}">Valider</button>
+                                                <!-- Accept comment modal-->
+                                                <div class="modal fade" id="acceptComment{{ comments.commentId }}" tabindex="-1" role="dialog" aria-labelledby="acceptCommentLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body">
+                                                                <p>Valider le commentaire ?</p>
+                                                                <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
+                                                                <a href="{{ session.routes.validcomment }}{{ comments.commentId }}" type="submit" class="btn btn-outline-success btn-sm text-white">Valider</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Delete comment button -->
+                                                <button class="btn btn-sm btn-danger btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#deleteComment{{ comments.commentId }}" >Supprimer</button>
+                                                <!-- Delete comment modal-->
+                                                <div class="modal fade" id="deleteComment{{ comments.commentId }}" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body">
+                                                                <p>Supprimer le commentaire ?</p>
+                                                                <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
+                                                                <a href="{{ session.routes.deletecomment }}{{ comments.commentId }}"  type="submit" class="btn btn-outline-danger btn-sm text-white">Supprimer</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </table>
+                    <!-- Affichage de tous les commentaires validés -->
+                    <h2 class="mt-5">Tous les commentaires</h2>
                     <table >
                         <tr class="columnTitle">
                             <th scope="col">Article</th>
                             <th scope="col">Utilisateur</th>
                             <th scope="col">Commentaire</th>
                             <th scope="col">Posté le</th>
-                            <th scope="col">Pending</th>
+                            <th scope="col">Gestion</th>
                         </tr>
-                        {% if countPending == 0 %}
+                        <tr>
+                        {% for validcomment in validCommentList %}
                             <tr>
-                                <td colspan="5">Aucun commentaire en attente de validation.</td>
-                            </tr>
-                        {% endif %}
-                        {% if countPending > 0 %}
-                        {% for comments in commentList %}
-                            <tr>
-                            {% if comments.pendingStatus == 1 %}
-                                <td class="tableResults" id="title" style="background-image: url(../../../public/images/blog/{{ comments.urlImg }}); background-repeat: no-repeat; background-size: 100%; background-position:center;"><a href="{{ session.routes.post }}{{ comments.postId }}">{{ comments.postTitle }}</a></td>
-                                <td class="tableResults">{{ comments.userName }}</td>
-                                <td class="tableResults">{{ comments.commentContent }}</td>
-                                <td class="tableResults">{{ comments.commentDateFr }}</td>
+                                {% if validcomment.pendingStatus == 0 %}
+                                <td class="tableResults" id="title" style="background-image: url(../../../public/images/blog/{{ validcomment.urlImg }}); background-repeat: no-repeat; background-size: 100%; background-position:center;"><a href="{{ session.routes.post }}{{ validcomment.postId }}">{{ validcomment.postTitle }}</a></td>
+                                <td class="tableResults">{{ validcomment.userName }}</td>
+                                <td class="tableResults">{{ validcomment.commentContent }}</td>
+                                <td class="tableResults">{{ validcomment.commentDateFr }}</td>
                                 <td class="tableResults">                         
-                                    <!-- Accept comment button -->
-                                    <button class="btn btn-sm btn-success btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#acceptComment{{ comments.commentId }}">Valider</button>
-                                    <!-- Accept comment modal-->
-                                    <div class="modal fade" id="acceptComment{{ comments.commentId }}" tabindex="-1" role="dialog" aria-labelledby="acceptCommentLabel" aria-hidden="true">
+                                    <!-- Delete comment button -->
+                                    <button class="btn btn-sm btn-danger btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#deleteComment{{ validcomment.commentId }}" >Supprimer</button>
+                                    <!-- Delete comment modal-->
+                                    <div class="modal fade" id="deleteComment{{ validcomment.commentId }}" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-body">
-                                                    <p>Valider le commentaire ?</p>
+                                                    <p>Supprimer le commentaire ?</p>
                                                     <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
-                                                    <a href="{{ session.routes.validcomment }}{{ comments.commentId }}" type="submit" class="btn btn-outline-success btn-sm text-white">Valider</a>
+                                                    <a href="{{ session.routes.deletecomment }}{{ validcomment.commentId }}"  type="submit" class="btn btn-outline-danger btn-sm text-white">Supprimer</a>
                                                 </div>
                                             </div>
                                         </div>
-                                  </div>
-                                  <!-- Delete comment button -->
-                                  <button class="btn btn-sm btn-danger btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#deleteComment{{ comments.commentId }}" >Supprimer</button>
-                                  <!-- Delete comment modal-->
-                                  <div class="modal fade" id="deleteComment{{ comments.commentId }}" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <p>Supprimer le commentaire ?</p>
-                                                <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
-                                                <a href="{{ session.routes.deletecomment }}{{ comments.commentId }}"  type="submit" class="btn btn-outline-danger btn-sm text-white">Supprimer</a>
-                                            </div>
-                                        </div>
                                     </div>
-                                  </div>
                                 </td>
-                            {% endif %}
+                                {% endif %}
                             </tr>
                         {% endfor %}
-                        {% endif %}
                     </table>
-                <!-- Affichage de tous les commentaires validés -->
-                <h2 class="mt-5">Tous les commentaires</h2>
-                <table >
-                    <tr class="columnTitle">
-                        <th scope="col">Article</th>
-                        <th scope="col">Utilisateur</th>
-                        <th scope="col">Commentaire</th>
-                        <th scope="col">Posté le</th>
-                        <th scope="col">Gestion</th>
-                    </tr>
-                    <tr>
-                    {% for validcomment in validCommentList %}
-                    <tr>
-                        {% if validcomment.pendingStatus == 0 %}
-                        <td class="tableResults" id="title" style="background-image: url(../../../public/images/blog/{{ validcomment.urlImg }}); background-repeat: no-repeat; background-size: 100%; background-position:center;"><a href="{{ session.routes.post }}{{ validcomment.postId }}">{{ validcomment.postTitle }}</a></td>
-                        <td class="tableResults">{{ validcomment.userName }}</td>
-                        <td class="tableResults">{{ validcomment.commentContent }}</td>
-                        <td class="tableResults">{{ validcomment.commentDateFr }}</td>
-                        <td class="tableResults">                         
-                            <!-- Delete comment button -->
-                            <button class="btn btn-sm btn-danger btn-admin" type="button" data-bs-toggle="modal" data-bs-target="#deleteComment{{ validcomment.commentId }}" >Supprimer</button>
-                            <!-- Delete comment modal-->
-                            <div class="modal fade" id="deleteComment{{ validcomment.commentId }}" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            <p>Supprimer le commentaire ?</p>
-                                            <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
-                                            <a href="{{ session.routes.deletecomment }}{{ validcomment.commentId }}"  type="submit" class="btn btn-outline-danger btn-sm text-white">Supprimer</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
-                </table>
+                </div>
             </div>
-        </div>
-        <div class="col-12 mt-3">
-        <nav>
-          <ul class="pagination">
-                {% for i in 1.. totalpages %}
-                    {% if i == page %}
-                        <li class="page-item active">
-                            <p class="page-link">{{ i }}</p>
-                        </li>
-                    {% endif %}
-                    {% if i != page %}
-                        <li class="page-item">
-                            <a href="{{ session.routes.commentnumber}}{{ i }}" class="page-link"> {{ i }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-          </nav>
-      </div>
-    </section>
-{% endif %}
-{% if session.username is not defined or  session.userIsAdmin == 0 %}
-    <header class="header">
-        <div class="container">
-            <h1 class="text-center text-danger text-uppercase mb-5">ACCÈS INTERDIT</h1>
-            <h2 class="text-center text-success "><a href="{{ session.routes.home }}">Retour à l'accueil</a></h2>
-        </div>
-    </header>
-{% endif %}
-
+            <div class="col-12 mt-3">
+                <nav>
+                    <ul class="pagination">
+                        {% for i in 1.. totalpages %}
+                            {% if i == page %}
+                                <li class="page-item active">
+                                    <p class="page-link">{{ i }}</p>
+                                </li>
+                            {% endif %}
+                            {% if i != page %}
+                                <li class="page-item">
+                                    <a href="{{ session.routes.commentnumber}}{{ i }}" class="page-link"> {{ i }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </section>
+    {% endif %}
+    
+    {% if session.username is not defined or session.userIsAdmin == 0 %}
+        <header class="header">
+            <div class="container">
+                <h1 class="text-center text-danger text-uppercase mb-5">ACCÈS INTERDIT</h1>
+                <h2 class="text-center text-success "><a href="{{ session.routes.home }}">Retour à l'accueil</a></h2>
+            </div>
+        </header>
+    {% endif %}
+    
 {% endblock %}
 

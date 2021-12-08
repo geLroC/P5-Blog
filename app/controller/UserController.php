@@ -7,7 +7,7 @@ class UserController{
     public function userList($page){
         global $twig;
         
-        //Preparing pagination
+        //PREPARIONG PAGINATION
         $user = new userManager();
         $usersByPage = 5;
         $nbusers = $user->userCount();
@@ -17,10 +17,11 @@ class UserController{
             $page = 1;
             header('Location:'.$_SESSION['routes']['userlist'].$page);
         }
-        //Pagination is Ready
+        //PAGINATION READY
         $users = $user->getPaginUserList($page, $usersByPage);
         echo $twig->render('userlist.twig', array_merge(['userlist'=>$users, 'page'=>$page, 'usersbypage'=>$usersByPage, 'totalpages'=>$totalPages]));
     }
+    
     public function setUserAdmin($userId){
         unset($_SESSION['tmp']);
         $user = new UserManager();
@@ -70,8 +71,14 @@ class UserController{
         global $twig;
         unset($_SESSION['tmp']);
         $user = new UserManager();
-        $currentUser = $user->getUserInfos($_SESSION['userId']);
-        echo $twig->render('myaccount.twig', ['currentUser'=>$currentUser]);
+        if(isset($_SESSION['userId'])){
+            $currentUser = $user->getUserInfos($_SESSION['userId']);
+            echo $twig->render('myaccount.twig', ['currentUser'=>$currentUser]);
+        }
+        else{
+            header('Location:'.$_SESSION['routes']['home']);
+        }
+        
     }
 
     public function editPassword($userId){
@@ -89,7 +96,7 @@ class UserController{
         $checkPasswords = $password === $passwordCheck;
         $passwordHash = sha1($password);
     
-        //Checking inputs
+        //CHECKING INPUTS
         if (!isset($password) || empty ($password)){
             $editPasswordErrors[] = "Merci de renseigner un nouveau mot de passe";
         }
@@ -100,14 +107,12 @@ class UserController{
             $editPasswordErrors[] = "Les mots de passes ne correspondent pas, vérifiez vos entrées.";
         }
         
-        if ($passwordHash == $passInDb)
-        {
-          $editPasswordErrors[] = "Vous utilisez déjà ce mot de passe.";
+        if ($passwordHash == $passInDb){
+            $editPasswordErrors[] = "Vous utilisez déjà ce mot de passe.";
         }
     
-        //No errors, insert into db
-        if (empty($editPasswordErrors) && $checkPassword = true)
-        {
+        //NO ERROR -- INSERT INTO DB
+        if (empty($editPasswordErrors) && $checkPassword = true){
             $user->editUserPassword($userId, $password);
             $editPasswordSuccess = "Votre mot de passe a été modifié !";
             $_SESSION['tmp'] = ['editPasswordSuccess'=>$editPasswordSuccess];

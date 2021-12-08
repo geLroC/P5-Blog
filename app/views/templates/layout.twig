@@ -1,121 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8" />
-        <meta  name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-        <link  rel="stylesheet" href="/P5-Blog/public/css/style.css"/>
-
-        {% block pagetitle %}
-        {% endblock %}
-
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-    </head>
-    <body>
-    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top py-1" id="mainNav">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#top">.LGRF</a>
-        <button class="navbar-toggler font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.home }}">Home</a></li>
-            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.postlist }}">Blog</a></li>
-            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.home }}#about">A propos</a></li>
-            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.home }}#contact">Contact</a></li>
-            {% if not session.userId %}
-              <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.authentication }}">Connexion/Inscription</a></li>
-            {% endif %}
-            {# If a session is set #}
-            {% if session.userId %}
-              {# If connected user is admin #}
-              {% if session.userIsAdmin == 1 %}
-                <li class="nav-item mx-0 mx-lg-1">
-                  <div class="dropdown">
-                    <button class="btn btn-sm dropdown-toggle m-1 text-white text-uppercase" type="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item nav-link py-2 px-0 px-lg-2" href="{{ session.routes.account }}">{{ session.username }}</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item nav-link py-2 px-0 px-lg-2 text-normalize" href="{{ session.routes.newpost }}">Nouvel article</a>
-                        <a class="dropdown-item nav-link py-2 px-0 px-lg-2 text-normalize" href="{{ session.routes.userlist }}1">Liste des utilisateurs</a>
-                        <a class="dropdown-item nav-link py-2 px-0 px-lg-2 text-normalize" href="{{ session.routes.commentlist }}">Liste des commentaires</a>
-                      </div>
-                  </div>
-                </li>
-              {% endif %}
-              {# If connected user is not admin #}
-              {% if session.userIsAdmin == 0 %}
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.account }}">{{ session.username }}</a></li>
-              {% endif %}
-              <!-- Disconnect button -->
-              <li class="m-1"><button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#disconnect">Déconnexion</button></li>
-              <!-- Disconnect modal-->
-              <div class="modal fade" id="disconnect" tabindex="-1" role="dialog" aria-labelledby="disconnectLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-body">
-                      <p>Se déconnecter ?</p>
-                      <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
-                      <button type="button" class="btn btn-outline-danger btn-sm text-white"><a href="{{ session.routes.disconnect }}">Déconnexion</a></button>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta  name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link  rel="stylesheet" href="/P5-Blog/public/css/style.css"/>
+    
+    {% block pagetitle %}{% endblock %}
+    
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+  </head>
+  <body>
+  <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top py-1" id="mainNav">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#top">.LGRF</a>
+      <button class="navbar-toggler font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.home }}">Home</a></li>
+          <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.postlist }}">Blog</a></li>
+          <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.home }}#about">A propos</a></li>
+          <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.home }}#contact">Contact</a></li>
+          {% if not session.userId %}
+            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.authentication }}">Connexion/Inscription</a></li>
+          {% endif %}
+          {# If a session is set #}
+          {% if session.userId %}
+            {# If connected user is admin #}
+            {% if session.userIsAdmin == 1 %}
+              <li class="nav-item mx-0 mx-lg-1">
+                <div class="dropdown">
+                  <button class="btn btn-sm dropdown-toggle m-1 text-white text-uppercase" type="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item nav-link py-2 px-0 px-lg-2" href="{{ session.routes.account }}">{{ session.username }}</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item nav-link py-2 px-0 px-lg-2 text-normalize" href="{{ session.routes.newpost }}">Nouvel article</a>
+                      <a class="dropdown-item nav-link py-2 px-0 px-lg-2 text-normalize" href="{{ session.routes.userlist }}1">Liste des utilisateurs</a>
+                      <a class="dropdown-item nav-link py-2 px-0 px-lg-2 text-normalize" href="{{ session.routes.commentlist }}">Liste des commentaires</a>
                     </div>
+                </div>
+              </li>
+            {% endif %}
+            {# If connected user is not admin #}
+            {% if session.userIsAdmin == 0 %}
+              <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-2 px-0 px-lg-2 rounded" href="{{ session.routes.account }}">{{ session.username }}</a></li>
+            {% endif %}
+            <!-- Disconnect button -->
+            <li class="m-1"><button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#disconnect">Déconnexion</button></li>
+            <!-- Disconnect modal-->
+            <div class="modal fade" id="disconnect" tabindex="-1" role="dialog" aria-labelledby="disconnectLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <p>Se déconnecter ?</p>
+                    <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm text-white"><a href="{{ session.routes.disconnect }}">Déconnexion</a></button>
                   </div>
                 </div>
               </div>
-            {% endif %}
-          </ul>
-        </div>
+            </div>
+          {% endif %}
+        </ul>
       </div>
-    </nav>
-
-    {% block content %}
-    {% endblock %}
-    
-    <!-- Footer-->
-    <footer class="footer text-center">
-      <div class="container">
-        <div class="row">
-          <!-- Footer Location-->
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <h4 class="text-uppercase mb-4">Où ?</h4>
-            <p class="lead mb-0">
-              Rouen, France.
-              <br />
-              Remote international.
-            </p>
-          </div>
-          <!-- Footer Social Icons-->
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <h4 class="text-uppercase mb-4">Réseaux</h4>
-            <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
-            <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
-          </div>
-          <!-- Footer About Text-->
-          <div class="col-lg-4">
-            <h4 class="text-uppercase mb-4">A propos de moi</h4>
-            <p class="lead mb-0">
-              Développeur web et application, tous projets bienvenus.
-            </p>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <!--Footer End-->
-
-
-    <!--Copyright Section-->
-    <div class="copyright py-0 text-center text-primary">
-      <div class="container"><small>Copyright &copy; .LGRF 2021</small></div>
     </div>
-    <!--Copyright Section End-->  
+  </nav>
+
+  {% block content %}
+  {% endblock %}
+      
+  <!-- Footer-->
+  <footer class="footer text-center">
+    <div class="container">
+      <div class="row">
+        <!-- Footer Location-->
+        <div class="col-lg-4 mb-5 mb-lg-0">
+          <h4 class="text-uppercase mb-4">Où ?</h4>
+          <p class="lead mb-0">
+            Rouen, France.
+            <br/>
+            Remote international.
+          </p>
+        </div>
+        <!-- Footer Social Icons-->
+        <div class="col-lg-4 mb-5 mb-lg-0">
+          <h4 class="text-uppercase mb-4">Réseaux</h4>
+          <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
+          <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
+        </div>
+        <!-- Footer About Text-->
+        <div class="col-lg-4">
+          <h4 class="text-uppercase mb-4">A propos de moi</h4>
+          <p class="lead mb-0">
+            Développeur web et application, tous projets bienvenus.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!--Footer End-->
+
+
+  <!--Copyright Section-->
+  <div class="copyright py-0 text-center text-primary">
+    <div class="container"><small>Copyright &copy; .LGRF 2021</small></div>
+  </div>
+  <!--Copyright Section End-->  
   </body>
 </html>

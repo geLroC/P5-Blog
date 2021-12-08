@@ -4,8 +4,7 @@ require_once './app/class/Dbconnect.php';
 
 class CommentManager{
 
-    public function getComments($postId){    
-        //$postId = implode($postId);
+    public function getComments($postId){
         $comments = DbConnect::connect()->prepare('SELECT c.commentId, DATE_FORMAT(c.commentDate, \'%d/%m/%Y à %Hh%i\') AS commentDateFr, c.commentContent, c.pendingStatus, c.userId, c.postId, u.userId, u.userName AS userName
         FROM comments c
         INNER JOIN user u
