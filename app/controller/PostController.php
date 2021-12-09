@@ -68,15 +68,15 @@ class PostController{
     }
     
     public function postEdition($postId){
-
+        global $router;
         $post = new PostManager();
         $postErrors = [];
         $postSuccess = [];
         $fileErrors = [];
-        $title = $_POST['title'];
-        $lede = $_POST['lede'];
+        $title = htmlspecialchars($_POST['title']);
+        $lede = htmlspecialchars($_POST['lede']);
         $content = $_POST['content'];
-        $ledeLength = strlen($_POST['lede']);
+        $ledeLength = strlen($lede);
     
         //CHECKING IF ALL FIELDS ARE COMPLETED
         if(!isset($_POST['title']) || empty($_POST['title'])){
@@ -96,7 +96,7 @@ class PostController{
         }
     
         if(empty($postErrors)){
-            if($_FILES['image']['error'] === UPLOAD_ERR_NO_FILE){
+            if(isset($_FILES['image']['error']) && $_FILES['image']['error'] === UPLOAD_ERR_NO_FILE){
                 $post->editPostNoPic($title, $lede, $content, $postId);
                 $postSuccess = "L'article ".$title." a bien été modifié.";
             }
@@ -141,7 +141,7 @@ class PostController{
             }
         }  
         $_SESSION['tmp'] = array_merge(['postSuccess'=>$postSuccess,'postError'=>$postErrors, 'fileError'=>$fileErrors]);
-        header('Location:'.$_SESSION['routes']['post'].implode($postId));
+        header('Location:'.$router->generate('post').implode($postId));
     }
 
     public function newPost(){
@@ -193,7 +193,7 @@ class PostController{
         if (isset($lede) && $ledeLength > 120){
             $postErrors[] = "Le chapô ne doit pas dépasser 120 caractères";
         }
-        if($_FILES['image']['error'] == 4){
+        if(isset($_FILES['image']['error']) && $_FILES['image']['error'] == 4){
             $postErrors[] = "Merci d'ajouter l'image d'illustration de l'article";
         }
     

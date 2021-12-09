@@ -6,15 +6,16 @@ require_once './app/model/CommentManager.php';
 class CommentController{
 
     public function newComment($postId){
+        global $router;
         unset($_SESSION['tmp']);
         $commentErrors = [];
         $commentSuccess = [];
         $commentAuthor = $_SESSION['userId'];
-        $commentContent = $_POST['comment'];
+        $commentContent = filter_var($_POST['comment'], FILTER_SANITIZE_STRING);
         $comment = new CommentManager();
     
         //CHECKING IF ALL FIELDS ARE COMPLETED
-        if(empty($_POST['comment'])){
+        if(empty($commentContent)){
             $commentErrors = "Votre commentaire est vide, impossible de l'enregistrer.";
         }
         else{		
@@ -22,8 +23,7 @@ class CommentController{
             $commentSuccess = "Votre commentaire a bien été soumis à validation par un administrateur.";
         }
         $_SESSION['tmp'] = array_merge(['commentError' =>$commentErrors],['commentSuccess'=>$commentSuccess]);
-        $link = $_SESSION['routes']['post'].implode($postId);
-        header('Location:'.$link.'#comments');
+        header('Location:'.$router->generate('post').implode($postId).'#comments');
         
     }
     

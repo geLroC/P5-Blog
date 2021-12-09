@@ -46,7 +46,7 @@ class AuthController{
                     $_SESSION['username'] = $username;
                     $_SESSION['userIsAdmin'] = $userIsAdmin;
                     $_SESSION['userId'] = $userid;
-                    $loginSuccess = "Vous êtes connecté. \nBon retour parmis nous " . $_POST['username']." !";
+                    $loginSuccess = "Vous êtes connecté. \nBon retour parmis nous " . $username." !";
                 }
             }
     
@@ -56,6 +56,7 @@ class AuthController{
     }
 
     public function userRegister(){
+        global $router;
         $registerErrors = [];
         $registerSuccess = [];
         //CHECKING INPUTS
@@ -102,17 +103,18 @@ class AuthController{
             if (!$checkUsername && !$checkUsermail && $checkPasswords && $validUsermail){
                 $passwordHash = sha1($password);
                 $user->registerUser($usermail, $username, $passwordHash);
-                $registerSuccess = "Votre compte a été créé avec succès.\n Bienvenue ". $_POST['username'] . "!";
+                $registerSuccess = "Votre compte a été créé avec succès.\n Bienvenue ". $username. "!";
             }
         }
         $_SESSION['tmp'] = array_merge(['registerSuccess'=>$registerSuccess,'registerError'=>$registerErrors]);
-        header('Location:'.$_SESSION['routes']['authentication']);
+        header('Location:'.$router->generate('authentication'));
     }
 
     public function disconnect(){
+        global $router;
         //UNSET SESSION INFOS
         unset($_SESSION['username'], $_SESSION['userIsAdmin'], $_SESSION['userId']);
         //REDIRECTING USER
-        header('Location:'.$_SESSION['routes']['home']);
+        header('Location:'.$router->generate('home'));
     }
 }

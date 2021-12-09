@@ -23,12 +23,13 @@ class UserController{
     }
     
     public function setUserAdmin($userId){
+        global $router;
         unset($_SESSION['tmp']);
         $user = new UserManager();
         $user->setAdmin($userId);
         $username = $user->getUsername(implode($userId));
         $_SESSION['tmp'] = 'Les droits administrateur ont été accordés à <strong>'.$username.'</strong>.';
-        header('Location:'.$_SESSION['routes']['userlist'].'1');
+        header('Location:'.$router->generate('userlist').'1');
     }   
     
     public function unsetUserAdmin($userId){
@@ -68,7 +69,7 @@ class UserController{
     }
 
     public function myAccount(){
-        global $twig;
+        global $router,$twig;
         unset($_SESSION['tmp']);
         $user = new UserManager();
         if(isset($_SESSION['userId'])){
@@ -76,7 +77,7 @@ class UserController{
             echo $twig->render('myaccount.twig', ['currentUser'=>$currentUser]);
         }
         else{
-            header('Location:'.$_SESSION['routes']['home']);
+            header('Location:'.$router->generate('home'));
         }
         
     }
@@ -89,12 +90,14 @@ class UserController{
         $currentUser = $user->getUserInfos($userId);
         $editPasswordErrors = [];
         $editPasswordSuccess = [];
-        $password = $_POST['password'];
-        $passwordCheck = $_POST['passwordCheck'];
-        $userInfos = $user->getUserInfos($userId);
-        $passInDb = $userInfos['userPassword'];
-        $checkPasswords = $password === $passwordCheck;
-        $passwordHash = sha1($password);
+        if (isset($_POST['password']) && isset($_POST['passwordCheck'])){
+            $password = $_POST['password'];
+            $passwordCheck = $_POST['passwordCheck'];
+            $userInfos = $user->getUserInfos($userId);
+            $passInDb = $userInfos['userPassword'];
+            $checkPasswords = $password === $passwordCheck;
+            $passwordHash = sha1($password);
+        }
     
         //CHECKING INPUTS
         if (!isset($password) || empty ($password)){
