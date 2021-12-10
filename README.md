@@ -1,5 +1,7 @@
 # Projet 5 - Blog PHP
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/246a00e40bdc40928de44273ec60f5af)](https://app.codacy.com/gh/geLroC/P5-Blog?utm_source=github.com&utm_medium=referral&utm_content=geLroC/P5-Blog&utm_campaign=Badge_Grade_Settings)
+
 Projet numéro 5 du parcours Développeur d'applications PHP/Symfony d'OpenClassrooms.<br/>
 Créer un blog **_from scratch_** en PHP orienté objet avec une architecture MVC.
 
