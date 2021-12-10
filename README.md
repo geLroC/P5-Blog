@@ -1,4 +1,4 @@
-# Projet 5 - Blog PHP
+# Projet 5 - Blog PHP [![Codacy Badge](https://app.codacy.com/project/badge/Grade/67aa9f5a916b4651b6af6ea84bf24ff2)](https://www.codacy.com/gh/geLroC/P5-Blog/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=geLroC/P5-Blog&amp;utm_campaign=Badge_Grade)
 
 Projet numéro 5 du parcours Développeur d'applications PHP/Symfony d'OpenClassrooms.<br/>
 Créer un blog **_from scratch_** en PHP orienté objet avec une architecture MVC.
@@ -32,8 +32,4 @@ Vous pouvez bien-sûr créer vos propres identifiants.
 <h2>Dépendances utilisées</h2>
 
 
-**Twig**
-
-**Altorouter**
-
-**PHPMailer**
+**Twig** - **Altorouter** - **PHPMailer**
