@@ -12,7 +12,6 @@ class PostManager{
     }
 
     public function getPaginPosts($page, $postsByPage){
-        $nbpost = self::postCount();
         $start = ($page-1)*$postsByPage;
         $postsList = DbConnect::connect()->query('SELECT postId, postTitle, postLede, urlImg 
         FROM post 
@@ -37,18 +36,18 @@ class PostManager{
     }
 
     public function postDelete($postId){
-        $id = implode($postId);
+        $postId = implode($postId);
         //DELETE IMG FROM DIR
         $deleteImg = DbConnect::connect()->prepare('SELECT urlImg FROM post where postId = ?');
-        $deleteImg->execute([$id]);
+        $deleteImg->execute([$postId]);
         $img = $deleteImg->fetchColumn();
         unlink('public/images/blog/'.$img);
         //DELETE ASSOCIATED COMMENTS 
         $deleteComments = DbConnect::connect()->prepare('DELETE FROM comments WHERE postId = ?');
-        $deleteComments->execute([$id]);
+        $deleteComments->execute([$postId]);
         //DELETE POST
         $deletePost = DbConnect::connect()->prepare('DELETE FROM post WHERE postId = ?');
-        $deletePost->execute([$id]);
+        $deletePost->execute([$postId]);
     }
 
     public function addPost($title, $lede, $content, $postAuthor, $file){

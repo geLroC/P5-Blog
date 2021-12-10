@@ -6,7 +6,7 @@ require_once './app/model/CommentManager.php';
 class PostController{
 
     public function showPost($params){
-        global $twig;
+        global $router, $twig;
         $_SESSION['tmp']= [];
         //EXPLODE URI PARAMS
         $params = implode('/', $params);
@@ -26,7 +26,7 @@ class PostController{
             $page = $params[2];
             if(!isset($page) || $page > $totalPages || $page <= 0){
                 $page = 1;
-                header('Location:'.$_SESSION['routes']['post'].$postId.'/page/'.$page);
+                header('Location:'.$router->generate('post').$postId.'/page/'.$page);
             }
             //PAGINATION READY - FETCHING COMMENT LIST
             $comment = $comments->getPaginCommentList($page, $commentsByPage);
@@ -95,7 +95,7 @@ class PostController{
             $postErrors[] = "Le chapô ne doit pas dépasser 120 caractères";
         }
     
-        if(empty($postErrors)){
+        if(empty($postErrors) && isset($_FILES['image'])){
             if(isset($_FILES['image']['error']) && $_FILES['image']['error'] === UPLOAD_ERR_NO_FILE){
                 $post->editPostNoPic($title, $lede, $content, $postId);
                 $postSuccess = "L'article ".$title." a bien été modifié.";

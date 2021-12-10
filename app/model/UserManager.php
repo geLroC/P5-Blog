@@ -3,8 +3,7 @@ require_once 'app/class/Dbconnect.php';
 
 class UserManager{
 
-    public function getUserIsAdmin(){
-    	$username = $_POST['username'];
+    public function getUserIsAdmin($username){
     	$req = DbConnect::connect()->prepare('SELECT userIsAdmin 
 		FROM user 
 		WHERE userName = ?');
@@ -13,8 +12,7 @@ class UserManager{
     	return $res;
     }
 
-    public function getUserIsActive(){
-		$username = $_POST['username'];
+    public function getUserIsActive($username){
     	$req = DbConnect::connect()->prepare('SELECT userIsActive 
 		FROM user 
 		WHERE userName = ?');
@@ -24,7 +22,6 @@ class UserManager{
     }
 
     public function getUserId($username){
-    	$username = $_POST['username'];
     	$req = DbConnect::connect()->prepare('SELECT userId 
 		FROM user 
 		WHERE userName = ?');
@@ -56,7 +53,7 @@ class UserManager{
     	$req = DbConnect::connect()->prepare('UPDATE user 
 		SET userIsAdmin = 1 
 		WHERE userId = :userId');
-    	$res = $req->execute(["userId"=>$userId]);
+    	$req->execute(["userId"=>$userId]);
     }
 
 	public function unsetAdmin($userId){
@@ -64,7 +61,7 @@ class UserManager{
     	$req = DbConnect::connect()->prepare('UPDATE user 
 		SET userIsAdmin = 0 
 		WHERE userId = :userId');
-    	$res = $req->execute(["userId"=>$userId]);
+    	$req->execute(["userId"=>$userId]);
     }
 
     public function setActive($userId){
@@ -72,8 +69,7 @@ class UserManager{
     	$req = DbConnect::connect()->prepare('UPDATE user 
 		SET userIsActive = 1 
 		WHERE userId = :userId');
-    	$res = $req->execute(["userId"=>$userId]);
-    	return $res;
+    	$req->execute(["userId"=>$userId]);
     }    
 
 	public function setInactive($userId){
@@ -81,8 +77,7 @@ class UserManager{
     	$req = DbConnect::connect()->prepare('UPDATE user 
 		SET userIsActive = 0 
 		WHERE userId = :userId');
-    	$res = $req->execute(["userId"=>$userId]);
-    	return $res;
+    	$req->execute(["userId"=>$userId]);
     }
 
     public function userDelete($userId){
@@ -99,27 +94,6 @@ class UserManager{
     	$req->execute(['usermail' => $usermail, 'username' => $username, 'password' => $password]);
     }
 
-    public function checkUsername($username){
-    	$username = $_POST['username'];
-    	$checkUsername = DbConnect::connect()->prepare('SELECT userName 
-		FROM user 
-		WHERE userName = ?');
-    	$checkUsername->execute([$username]);
-    	$user = $checkUsername->fetchColumn();
-    	return $user;
-    }
-
-    public function checkPassword($password){
-    	$username = $_POST['username'];
-    	$passwordCheck = DbConnect::connect()->prepare('SELECT userPassword 
-		FROM user 
-		where userName = ?');
-    	$passwordCheck->execute([$username]);
-    	$passwordInDb = $passwordCheck->fetch();
-    	$passwordIsCorrect = $password == $passwordInDb['userPassword'];
-    	return $passwordIsCorrect;
-    }
-
     public function checkUsermail($usermail){
     	$usermailCheck = DbConnect::connect()->prepare('SELECT userMail 
 		FROM user 
@@ -133,7 +107,7 @@ class UserManager{
     	$req = DbConnect::connect()->prepare('SELECT userName, userPassword 
 		FROM user 
 		WHERE userName = :userName');
-    	$req->execute(["userName"=>$username]);
+    	$req->execute(['userName'=>$username]);
     	$res = $req->fetch();
 		if ($res === false){
 			return $userOK = false;
@@ -145,7 +119,6 @@ class UserManager{
     }
 
     public function editUserPassword($userId, $userpassword){
-    	$userpassword = sha1($_POST['password']);
     	$req = DbConnect::connect()->prepare('UPDATE user 
 		SET userPassword = :userPassword 
 		WHERE userId = :userId');

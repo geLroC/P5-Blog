@@ -38,7 +38,7 @@ class UserController{
         $user->unsetAdmin($userId);
         $username = $user->getUsername(implode($userId));
         $_SESSION['tmp'] = 'Les droits administrateur de <strong>'.$username.'</strong> ont été révoqués';
-        header('Location:'.$_SESSION['routes']['userlist'].'1');
+        header('Location:'.$router->generate('userlist').'1');
     }
 
     public function setUserActive($userId){
@@ -47,7 +47,7 @@ class UserController{
         $user->setActive($userId);
         $username = $user->getUsername(implode($userId));
         $_SESSION['tmp'] = 'L\'utilisateur <strong>'.$username.'</strong> a été activé';
-        header('Location:'.$_SESSION['routes']['userlist'].'1');
+        header('Location:'.$router->generate('userlist').'1');
     }
 
     public function setUserInactive($userId){
@@ -56,7 +56,7 @@ class UserController{
         $user->setInactive($userId);
         $username = $user->getUsername(implode($userId));
         $_SESSION['tmp'] = 'L\'utilisateur <strong>'.$username.'</strong> a été désactivé';
-        header('Location:'.$_SESSION['routes']['userlist'].'1');
+        header('Location:'.$router->generate('userlist').'1');
     }
 
     public function deleteUser($userId){
@@ -65,7 +65,7 @@ class UserController{
         $username = $user->getUsername(implode($userId));
         $_SESSION['tmp'] = 'L\'utilisateur <strong>'.$username.'</strong> a été supprimé';
         $user->userDelete($userId);
-        header('Location:'.$_SESSION['routes']['userlist']);
+        header('Location:'.$router->generate('userlist'));
     }
 
     public function myAccount(){
@@ -73,7 +73,8 @@ class UserController{
         unset($_SESSION['tmp']);
         $user = new UserManager();
         if(isset($_SESSION['userId'])){
-            $currentUser = $user->getUserInfos($_SESSION['userId']);
+            $userId = $_SESSION['userId'];
+            $currentUser = $user->getUserInfos($userId);
             echo $twig->render('myaccount.twig', ['currentUser'=>$currentUser]);
         }
         else{
@@ -83,16 +84,18 @@ class UserController{
     }
 
     public function editPassword($userId){
-        global $twig;
+        global $router;
         unset($_SESSION['tmp']);
+
         $user = new UserManager();
-        $userId = implode('',$userId);
+        $userId = implode($userId);
         $currentUser = $user->getUserInfos($userId);
         $editPasswordErrors = [];
         $editPasswordSuccess = [];
+        $password = $_POST['password'];
+        $passwordCheck = $_POST['passwordCheck'];
+
         if (isset($_POST['password']) && isset($_POST['passwordCheck'])){
-            $password = $_POST['password'];
-            $passwordCheck = $_POST['passwordCheck'];
             $userInfos = $user->getUserInfos($userId);
             $passInDb = $userInfos['userPassword'];
             $checkPasswords = $password === $passwordCheck;
@@ -103,10 +106,10 @@ class UserController{
         if (!isset($password) || empty ($password)){
             $editPasswordErrors[] = "Merci de renseigner un nouveau mot de passe";
         }
-        if (!isset($password) || empty ($password)){
+        if (!isset($passwordCheck) || empty ($passwordCheck)){
             $editPasswordErrors[] = "Merci de renseigner la validation du mot de passe.";
         }
-        if (!empty($password) && !$checkPasswords){
+        if (!empty($password) && !empty($passwordCheck) && !$checkPasswords){
             $editPasswordErrors[] = "Les mots de passes ne correspondent pas, vérifiez vos entrées.";
         }
         
@@ -123,15 +126,15 @@ class UserController{
         else{
             $_SESSION['tmp'] = ['editPasswordError'=>$editPasswordErrors];
         }
-        header('Location:'.$_SESSION['routes']['account']);
+        header('Location:'.$router->generate('account'));
     }
 
-    public function userIsAdmin(){
-        getUserIsAdmin();
+    public function userIsAdmin($username){
+        getUserIsAdmin($username);
     }
 
-    public function userIsActive(){
-        getUserIsActive();
+    public function userIsActive($username){
+        getUserIsActive($username);
     }
     
 }

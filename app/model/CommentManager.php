@@ -45,7 +45,7 @@ class CommentManager{
         $req = DbConnect::connect()->prepare('UPDATE comments 
         SET pendingStatus = 0 
         WHERE commentId = ?');
-        $res = $req->execute([$commentId]);
+        $req->execute([$commentId]);
     }
     
     public function pendingCommentsCount(){

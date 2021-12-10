@@ -28,7 +28,7 @@ class CommentController{
     }
     
     public function commentList($page){
-        global $twig;
+        global $router,$twig;
         $comments = new CommentManager();
         $commentList = $comments->getCommentList();
         //GETTING PENDING COMMENTS AUTHOR
@@ -49,7 +49,7 @@ class CommentController{
         $page = implode('',$page);
         if(!isset($page) || $page > $totalPages || $page <= 0){
             $page = 1;
-            header('Location:'.$_SESSION['routes']['commentnumber'].$page);
+            header('Location:'.$router->generate('commentnumber').$page);
         }
         //PAGINATION READY
         $validCommentList = $comments->getPaginCommentList($page, $commentsByPage);

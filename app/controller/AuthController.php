@@ -11,6 +11,7 @@ class AuthController{
     }
 
     public function userLogin(){
+        global $router;
         $loginErrors = [];
         $loginSuccess = [];
         // CHECKING INPUTS
@@ -35,14 +36,14 @@ class AuthController{
                 $loginErrors[] = "Nom d'utilisateur et/ou mot de passe incorrect.";
             }
             else {			
-                $userid = $user->getUserId($username);
-                $userIsAdmin = $user->getUserIsAdmin();
-                $userIsActive = $user->getUserIsActive();
+                $userIsActive = $user->getUserIsActive($username);
     
                 if($userIsActive == 0){
                     $loginErrors[] = "Votre compte est désactivé, merci de prendre contact avec un administrateur.";
                 }
                 else{
+                    $userid = $user->getUserId($username);
+                    $userIsAdmin = $user->getUserIsAdmin($username);
                     $_SESSION['username'] = $username;
                     $_SESSION['userIsAdmin'] = $userIsAdmin;
                     $_SESSION['userId'] = $userid;
@@ -52,7 +53,7 @@ class AuthController{
     
         }
         $_SESSION['tmp'] = array_merge(['loginSuccess'=>$loginSuccess,'loginError'=>$loginErrors]);
-        header('Location:'.$_SESSION['routes']['authentication']);
+        header('Location:'.$router->generate('authentication'));
     }
 
     public function userRegister(){

@@ -1,16 +1,25 @@
-# P5-Blog
+# Projet 5 - Blog PHP
+
 Projet numéro 5 du parcours Développeur d'applications PHP/Symfony d'OpenClassrooms.<br/>
-Créer un blog **_from scratch_** en PHP orienté objet avec une architecture MVC.<br/><br/>
+Créer un blog **_from scratch_** en PHP orienté objet avec une architecture MVC.
+
+<h2>Pré-requis</h2>
+
+- Serveur Web (Apache, PHP, MySQL)
+- Terminal
+- Gestionnaire de dépendance `Composer`
 
 <h2>Installation</h2>
 
 - Clonez le repository sur votre machine,
-
-- Télchargez le fichier `/database/p5blog.sql` et importez la base de données sur votre serveur,
-
-- Dans le fichier `/app/config/dbconfig.php` renseignez les informations nécessaires à la connexion à votre base de données<br/>
-- Dans le fichier `/app/config/mailerconfig.php` renseignez les informations du compte de messagerie,<br/>
-- Dans le fichier `/app/config/routerconfig.php` renseignez le chemin du dossier public<br/>
+- Ouvrez un terminal dans le dossier du projet précédemment cloné
+- Éxécutez la commande `composer install`
+- Créez une base de donnée
+- Téléchargez et importez la base de donnée via le fichier `/database/p5blog.sql`
+- Dans le dossier `/app/config/`
+   - Ouvrez le fichier `dbconfig.php` afin de configurer les informations de connexion à votre base de données<br/>
+   - Ouvrez le fichier `mailerconfig.php` afin de renseigner les informations de votre compte de messagerie<br/>
+   - Ouvrez le fichier `routerconfig.php` afin de renseigner le chemin du dossier public
 
 <h2>Administration</h2>
 Des comptes administrateurs et utilisateurs sont déjà présents dans la base de donnée.
@@ -23,8 +32,8 @@ Vous pouvez bien-sûr créer vos propres identifiants.
 <h2>Dépendances utilisées</h2>
 
 
-**Twig**&emsp;&emsp;&emsp;&emsp;`composer require twig/twig`
+**Twig**
 
-**Altorouter**&ensp;&emsp;`composer require altorouter/altorouter`
+**Altorouter**
 
-**PHPMailer**&ensp;&emsp;`composer require phpmailer/phpmailer`
+**PHPMailer**
