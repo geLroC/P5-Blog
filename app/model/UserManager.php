@@ -126,7 +126,6 @@ class UserManager{
     }
 
 	public function getPaginUserList($page, $usersByPage){
-		$user = self::userCount();
 		$start = ($page-1)*$usersByPage;
 		$userList = DbConnect::connect()->query('SELECT userId, userMail, userName, DATE_FORMAT(userCreationDate, \'%d/%m/%Y à %Hh%i\') AS userCreationDateFr, userIsAdmin, userIsActive 
 		FROM user 

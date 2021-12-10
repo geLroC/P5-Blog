@@ -11,7 +11,7 @@ class Dbconnect{
             return $database;
         }
         catch (Exception $err){
-            die('Erreur : '.$err->getMessage());
+            echo 'Erreur : '.$err->getMessage();
         }
     }
 }

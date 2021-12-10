@@ -154,8 +154,7 @@ class PostController{
         global $router;
         $post = new PostManager();
         $post->postDelete($postId);
-        $link = $router->generate('postlist');
-        header('Location:'.$link);
+        header('Location:'.$router->generate('postlist'));
     }
 
     public function postEdit($postId){
@@ -167,52 +166,39 @@ class PostController{
     }
 
     public function addNewPost(){
-        
-        $post = new PostManager();
+        global $router;
         $postErrors = [];
         $postSuccess = [];
-
-        $title = $_POST['title'];
-        $lede = $_POST['lede'];
-        $ledeLength = strlen($lede);
-        $content = $_POST['content'];
-        $postAuthor = $_SESSION['userId'];
-
-
-        //CHECKING IF ALL FIELDS ARE COMPLETED
-        if(!isset($title) || empty($title)){
-            $postErrors[] = "Merci de renseigner le titre de l'article";
-        }
-        if(!isset($lede) || empty($lede)){
-            $postErrors[] = "Merci de renseigner le chapô de l'article";
-        }
-        if(!isset($content) || empty($content)){
-            $postErrors[] = "Merci de renseigner le contenu de l'article";
-        }
     
-        if (isset($lede) && $ledeLength > 120){
-            $postErrors[] = "Le chapô ne doit pas dépasser 120 caractères";
-        }
-        if(isset($_FILES['image']['error']) && $_FILES['image']['error'] == 4){
-            $postErrors[] = "Merci d'ajouter l'image d'illustration de l'article";
-        }
+        //ALL INPUT COMPLETED
+        if (isset($_POST['title']) && isset($_POST['lede']) && isset($_POST['content']) && $_FILES['image']['error'] != 4){
+            
+            $lede = htmlspecialchars($_POST['lede']);
+            $ledeLength = strlen($lede);
+            
+            if (isset($lede) && $ledeLength > 120){
+                $postErrors[] = "Le chapô ne doit pas dépasser 120 caractères";
+            }
     
-        if(isset($postErrors) && empty($postErrors))
-        {
+            $title = htmlspecialchars($_POST['title']);
+            $content = $_POST['content'];
+            $postAuthor = $_SESSION['userId'];
+            
+    
             //SETTING FILE VARIABLES
             $tmpName = $_FILES['image']['tmp_name'];
             $name = $_FILES['image']['name'];
             $size = $_FILES['image']['size'];
             $error = $_FILES['image']['error'];
-
+    
             //GETTING FILE EXTENSION
             $setExtension = explode('.', $name);
             $extension = strtolower(end($setExtension));
             $extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-
+    
             //SETTING SIZE LIMIT
             $maxSize = 10000000;
-
+    
             //CHECKING SIZE
             if ($size >= $maxSize || $error == 1)
             {
@@ -233,12 +219,19 @@ class PostController{
                 $imageName = uniqid('', false);
                 $file = $imageName.".".$extension;
                 move_uploaded_file($tmpName, 'public/images/blog/'.$file);
+                $post = new PostManager();
                 $post->addPost($title, $lede, $content, $postAuthor, $file);
                 $postSuccess = "L'article ".$title." a bien été ajouté.";
             }
         }
+    
+        //AN INPUT IS MISSING
+        else{
+            $postErrors[] = "Merci de renseigner le titre, le chapô, le contenu de l'article et d'insérer une image d'illustration";
+        }
+    
         $_SESSION['tmp'] = array_merge(['postSuccess'=>$postSuccess,'postError'=>$postErrors, 'fileError'=>$fileErrors]);
-        header('Location:'.$_SESSION['routes']['newpost']);
+        header('Location:'.$router->generate('newpost'));
     }
 
 }

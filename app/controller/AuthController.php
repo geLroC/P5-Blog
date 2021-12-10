@@ -6,8 +6,8 @@ class AuthController{
 
     public function authentication(){
         global $twig;
-        echo $twig->render('authentication.twig');
         unset($_SESSION['tmp']);
+        echo $twig->render('authentication.twig');
     }
 
     public function userLogin(){
@@ -60,20 +60,11 @@ class AuthController{
         global $router;
         $registerErrors = [];
         $registerSuccess = [];
+
         //CHECKING INPUTS
-        if (!isset($_POST['usermail']) || empty ($_POST['usermail'])){
-            $registerErrors[] = "Merci de renseigner votre email.";
-        }
-        if (!isset($_POST['username']) || empty ($_POST['username'])){
-            $registerErrors[] = "Merci de renseigner votre nom d'utilisateur.";
-        }
-        if (!isset($_POST['password']) || empty ($_POST['password'])){
-            $registerErrors[] = "Merci de renseigner un mot de passe.";
-        }
-        if (!isset($_POST['passwordCheck']) || empty ($_POST['passwordCheck'])){
-            $registerErrors[] = "Merci de renseigner la validation de mot de passe.";
-        }
-        
+        if (empty ($_POST['usermail']) || empty ($_POST['username']) || empty ($_POST['password']) || empty ($_POST['passwordCheck'])){
+            $registerErrors[] = "Merci de renseigner tous les champs.";
+        }        
 
         //NO ERRORS -- CHECKING INPUTS VALUES
         if (empty($registerErrors)){
@@ -88,14 +79,17 @@ class AuthController{
             if (!$validUsermail){
                 $registerErrors[] = "L'email n'est pas valide, merci de la vérifier.";
             }
+
             $checkUsermail = $user->checkUsermail($usermail);
             if ($checkUsermail){
                 $registerErrors[] = "Cet adresse email est déjà utilisée.";
             }
+
             $checkUsername = $user->checkUsername($username);
             if ($checkUsername){
                 $registerErrors[] = "Ce nom d'utilisateur est déjà utilisé.";
             }
+            
             $checkPasswords = $password === $passwordCheck;
             if (!$checkPasswords){
                 $registerErrors[] = "Les mots de passes ne correspondent pas, vérifiez vos entrées.";
