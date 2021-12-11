@@ -84,8 +84,9 @@ class AuthController{
             if ($checkUsermail){
                 $registerErrors[] = "Cet adresse email est déjà utilisée.";
             }
-
-            $checkUsername = $user->checkUsername($username);
+           
+            $passwordHash = sha1($password);
+            $checkUsername = $user->checkUser($username, $passwordHash);
             if ($checkUsername){
                 $registerErrors[] = "Ce nom d'utilisateur est déjà utilisé.";
             }
@@ -96,7 +97,6 @@ class AuthController{
             }
             //ALL INPUTS ARE VALID -- INSERT INTO DB 
             if (!$checkUsername && !$checkUsermail && $checkPasswords && $validUsermail){
-                $passwordHash = sha1($password);
                 $user->registerUser($usermail, $username, $passwordHash);
                 $registerSuccess = "Votre compte a été créé avec succès.\n Bienvenue ". $username. "!";
             }

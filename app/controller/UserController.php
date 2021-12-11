@@ -33,6 +33,7 @@ class UserController{
     }   
     
     public function unsetUserAdmin($userId){
+        global $router;
         unset($_SESSION['tmp']);
         $user = new UserManager();
         $user->unsetAdmin($userId);
@@ -42,6 +43,7 @@ class UserController{
     }
 
     public function setUserActive($userId){
+        global $router;
         unset($_SESSION['tmp']);
         $user = new UserManager();
         $user->setActive($userId);
@@ -51,6 +53,7 @@ class UserController{
     }
 
     public function setUserInactive($userId){
+        global $router;
         unset($_SESSION['tmp']);
         $user = new UserManager();
         $user->setInactive($userId);
@@ -60,6 +63,7 @@ class UserController{
     }
 
     public function deleteUser($userId){
+        global $router;
         unset($_SESSION['tmp']);
         $user = new UserManager();
         $username = $user->getUsername(implode($userId));
@@ -119,7 +123,7 @@ class UserController{
     
         //NO ERROR -- INSERT INTO DB
         if (empty($editPasswordErrors) && $checkPassword = true){
-            $user->editUserPassword($userId, $password);
+            $user->editUserPassword($userId, $passwordHash);
             $editPasswordSuccess = "Votre mot de passe a été modifié !";
             $_SESSION['tmp'] = ['editPasswordSuccess'=>$editPasswordSuccess];
         }
