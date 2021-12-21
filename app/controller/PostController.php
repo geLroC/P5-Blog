@@ -16,36 +16,43 @@ class PostController{
         //GET POST
         $post = new PostManager();
         $currentPost = $post->getPost($postId);
-        //PAGIN COMMENTS
-        $comments = new CommentManager();
-        $commentsByPage = 6;
-        $nbcomments = $comments->getComments($postId)->rowCount();
-        $totalPages = ceil($nbcomments/$commentsByPage);
-        // IF POST HAS > 6 COMMENTS -- USE PAGINATION
-        if($nbcomments > 6){
-            $page = $params[2];
-            if(!isset($page) || $page > $totalPages || $page <= 0){
-                $page = 1;
-                header('Location:'.$router->generate('post').$postId.'/page/'.$page);
-            }
-            //PAGINATION READY - FETCHING COMMENT LIST
-            $comment = $comments->getPaginCommentList($page, $commentsByPage);
-            //FETCHING COMMENT AUTHOR
-            foreach($comment as $key=>$comments){
-                $user = new UserManager();
-                $userid = $comments['userId'];
-                $username = $user->getUsername($userid);
-                $comments['userName'] = $username;
-                $comment[$key] = $comments;
-            }
-            //ALL SET -- RENDERING VIEW
-            echo $twig->render('post.twig', array_merge(['currentPost'=>$currentPost,'comments'=>$comment, 'page'=>$page, 'commentsbypage'=>$commentsByPage, 'totalpages'=>$totalPages, 'nbcomments'=>$nbcomments]));
-        }
-        //IF POST HAS < 6 COMMENTS -- PAGINATION NOT NEEDED
-        else{
+        // IF POST EXISTS
+        if($currentPost){
+            //PAGIN COMMENTS
             $comments = new CommentManager();
-            $comment = $comments->getComments($postId);
-            echo $twig->render('post.twig', array_merge(['currentPost'=>$currentPost, 'comments'=>$comment, 'nbcomments'=>$nbcomments]));
+            $commentsByPage = 6;
+            $nbcomments = $comments->getComments($postId)->rowCount();
+            $totalPages = ceil($nbcomments/$commentsByPage);
+            // IF POST HAS > 6 COMMENTS -- USE PAGINATION
+            if($nbcomments > 6){
+                $page = $params[2];
+                if(!isset($page) || $page > $totalPages || $page <= 0){
+                    $page = 1;
+                    header('Location:'.$router->generate('post').$postId.'/page/'.$page);
+                }
+                //PAGINATION READY - FETCHING COMMENT LIST
+                $comment = $comments->getPaginCommentList($page, $commentsByPage);
+                //FETCHING COMMENT AUTHOR
+                foreach($comment as $key=>$comments){
+                    $user = new UserManager();
+                    $userid = $comments['userId'];
+                    $username = $user->getUsername($userid);
+                    $comments['userName'] = $username;
+                    $comment[$key] = $comments;
+                }
+                //ALL SET -- RENDERING VIEW
+                echo $twig->render('post.twig', array_merge(['currentPost'=>$currentPost,'comments'=>$comment, 'page'=>$page, 'commentsbypage'=>$commentsByPage, 'totalpages'=>$totalPages, 'nbcomments'=>$nbcomments]));
+            }
+            //IF POST HAS < 6 COMMENTS -- PAGINATION NOT NEEDED
+            else{
+                $comments = new CommentManager();
+                $comment = $comments->getComments($postId);
+                echo $twig->render('post.twig', array_merge(['currentPost'=>$currentPost, 'comments'=>$comment, 'nbcomments'=>$nbcomments]));
+            }
+        }
+        // IF POST DOES NOT EXIST
+        else{
+            echo $twig->render('post.twig');
         }
     }
 
