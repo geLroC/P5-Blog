@@ -13,6 +13,17 @@
         </header>
         <section class="page-section bg-primary">
             <div class="container">
+                {% if session.tmp.commentDeleted %}
+                <div class="alert alert-danger text-center" role="alert">
+				    {{ session.tmp.commentDeleted|nl2br }}
+                </div>
+                {% endif %}
+                {% if session.tmp.commentValidated %}
+                <div class="alert alert-success text-center" role="alert">
+				    {{ session.tmp.commentValidated|nl2br }}
+                </div>
+                {% endif %}
+
                 <div class="col-12 text-white mx-auto justify-content-center">
                     <h2>Commentaires en attente de validation</h2>
                         <table >

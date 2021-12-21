@@ -72,26 +72,25 @@ class PostController{
         $post = new PostManager();
         $postErrors = [];
         $postSuccess = [];
-        $fileErrors = [];
         $title = htmlspecialchars($_POST['title']);
         $lede = htmlspecialchars($_POST['lede']);
         $content = $_POST['content'];
         $ledeLength = strlen($lede);
     
         //CHECKING IF ALL FIELDS ARE COMPLETED
-        if(!isset($_POST['title']) || empty($_POST['title'])){
+        if(!isset($title) || empty($title)){
             $postErrors[] = "Merci de renseigner le titre de l'article";
         }
 
-        if(!isset($_POST['lede']) || empty($_POST['lede'])){
+        if(!isset($lede) || empty($lede)){
             $postErrors[] = "Merci de renseigner le chapô de l'article";
         }
 
-        if(!isset($_POST['content']) || empty($_POST['content'])){
+        if(!isset($content) || empty($content)){
             $postErrors[] = "Merci de renseigner le contenu de l'article";
         }
     
-        if (isset($_POST['lede']) && $ledeLength > 120){
+        if (isset($lede) && $ledeLength > 120){
             $postErrors[] = "Le chapô ne doit pas dépasser 120 caractères";
         }
     
@@ -106,6 +105,7 @@ class PostController{
                 $name = $_FILES['image']['name'];
                 $size = $_FILES['image']['size'];
                 $error = $_FILES['image']['error'];
+                $fileErrors = [];
     
                 //GETTING FILE EXTENSION
                 $setExtension = explode('.', $name);
@@ -141,7 +141,7 @@ class PostController{
             }
         }  
         $_SESSION['tmp'] = array_merge(['postSuccess'=>$postSuccess,'postError'=>$postErrors, 'fileError'=>$fileErrors]);
-        header('Location:'.$router->generate('post').implode($postId));
+        header('Location:'.$router->generate('editpost').implode($postId));
     }
 
     public function newPost(){
@@ -153,7 +153,9 @@ class PostController{
     public function deletePost($postId){
         global $router;
         $post = new PostManager();
+        $title = $post->getPost($postId);
         $post->postDelete($postId);
+        $_SESSION['tmp'] = "L'article ".$title['postTitle']." a été supprimé.";
         header('Location:'.$router->generate('postlist'));
     }
 

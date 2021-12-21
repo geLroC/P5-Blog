@@ -6,6 +6,7 @@ class UserController{
 
     public function userList($page){
         global $twig;
+        unset($_SESSION['tmp']);
         
         //PREPARIONG PAGINATION
         $user = new userManager();
@@ -69,7 +70,7 @@ class UserController{
         $username = $user->getUsername(implode($userId));
         $_SESSION['tmp'] = 'L\'utilisateur <strong>'.$username.'</strong> a été supprimé';
         $user->userDelete($userId);
-        header('Location:'.$router->generate('userlist'));
+        header('Location:'.$router->generate('userlist').'1');
     }
 
     public function myAccount(){
@@ -88,49 +89,64 @@ class UserController{
     }
 
     public function editPassword($userId){
-        global $router;
+        global $router, $twig;
         unset($_SESSION['tmp']);
 
+        // GETTING CURRENT USER INFOS
         $user = new UserManager();
         $userId = implode($userId);
         $currentUser = $user->getUserInfos($userId);
+        
+        // SETTING SUCCESS/ERRORS ARRAYS
         $editPasswordErrors = [];
         $editPasswordSuccess = [];
-        $password = $_POST['password'];
-        $passwordCheck = $_POST['passwordCheck'];
 
-        if (isset($_POST['password']) && isset($_POST['passwordCheck'])){
-            $userInfos = $user->getUserInfos($userId);
-            $passInDb = $userInfos['userPassword'];
-            $checkPasswords = $password === $passwordCheck;
-            $passwordHash = sha1($password);
-        }
-    
         //CHECKING INPUTS
-        if (!isset($password) || empty ($password)){
+        if (empty($_POST['oldPassword'])){
+            $editPasswordErrors[] = "Merci de renseigner votre mot de passe actuel";
+        }
+        if (empty($_POST['password'])){
             $editPasswordErrors[] = "Merci de renseigner un nouveau mot de passe";
         }
-        if (!isset($passwordCheck) || empty ($passwordCheck)){
+        if (empty($_POST['passwordCheck'])){
             $editPasswordErrors[] = "Merci de renseigner la validation du mot de passe.";
         }
-        if (!empty($password) && !empty($passwordCheck) && !$checkPasswords){
-            $editPasswordErrors[] = "Les mots de passes ne correspondent pas, vérifiez vos entrées.";
+
+        //ALL INPUTS COMPLETED
+        if (isset($_POST['password']) && !empty($_POST['password']) && isset($_POST['passwordCheck']) && !empty($_POST['passwordCheck']) && isset($_POST['oldPassword']) && !empty($_POST['oldPassword'])){
+            $oldPassword = $_POST['oldPassword'];
+            $password = $_POST['password'];
+            $passwordCheck = $_POST['passwordCheck'];
+
+            $passInDb = $currentUser['userPassword'];
+            $oldPasswordHash = sha1($oldPassword);
+            $checkOldPassword = $oldPasswordHash === $passInDb;
+            $checkPasswords = $password === $passwordCheck;
+            $passwordHash = sha1($password);
+
+            if (!$checkPasswords){
+                $editPasswordErrors[] = "Les mots de passes ne correspondent pas, vérifiez vos entrées.";
+            }
+            if (!$checkOldPassword){
+                $editPasswordErrors[] = "Mot de passe actuel erroné.";
+            }
         }
-        
-        if ($passwordHash == $passInDb){
-            $editPasswordErrors[] = "Vous utilisez déjà ce mot de passe.";
-        }
-    
+
         //NO ERROR -- INSERT INTO DB
-        if (empty($editPasswordErrors) && $checkPassword = true){
+        if (empty($editPasswordErrors) && $checkPasswords && $checkOldPassword){
             $user->editUserPassword($userId, $passwordHash);
-            $editPasswordSuccess = "Votre mot de passe a été modifié !";
-            $_SESSION['tmp'] = ['editPasswordSuccess'=>$editPasswordSuccess];
+            $editPasswordSuccess = "Votre mot de passe a été modifié.";
+            $_SESSION['tmp'] = ['loginSuccess'=>$editPasswordSuccess];
+            
+            // DISCONNECTING USER
+            unset($_SESSION['username'], $_SESSION['userIsAdmin'], $_SESSION['userId']);
+            header('Location:'.$router->generate('authentication'));
         }
         else{
             $_SESSION['tmp'] = ['editPasswordError'=>$editPasswordErrors];
+            print("<script type=\"text/javascript\">setTimeout('location=(".$router->generate('authentication').")' ,1000);</script>");
         }
-        header('Location:'.$router->generate('account'));
+
     }
 
     public function userIsAdmin($username){

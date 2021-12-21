@@ -66,18 +66,20 @@ class CommentController{
     
     public function deleteComment($commentId){
         global $router;
+        unset($_SESSION['tmp']);
         $comment = new CommentManager();
         $comment->commentDelete($commentId);
-        
+        $_SESSION['tmp']['commentDeleted'] = "Le commentaire a bien été supprimé";
         $link = $router->generate('commentlist');
         header('Location:'.$link);
     }
     
     public function validateComment($commentId){
         global $router;
+        unset($_SESSION['tmp']);
         $comment = new CommentManager();
         $comment->setValidComment($commentId);
-        
+        $_SESSION['tmp']['commentValidated'] = "Le commentaire a bien été validé";
         $link = $router->generate('commentlist');
         header('Location:'.$link);
     }

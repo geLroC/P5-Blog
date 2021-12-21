@@ -36,9 +36,11 @@
                         <label for="username">Nom d'utilisateur</label>
                         <input readonly class="form-control mb-3" name="username" type="text" value="{{ currentUser.userName }}"/>
 
-                        <label for="password" class="mt-5">Nouveau mot de passe</label>
+                        <label for="password" class="mt-5">Ancien mot de passe</label>
+                        <input class="form-control mb-2" type="password" name="oldPassword" placeholder="Ancien mot de passe">
+                        <label for="password">Nouveau mot de passe</label>
                         <input class="form-control mb-2" type="password" name="password" placeholder="Nouveau mot de passe">
-                        <label for="passwordCheck">Confirmer mot de passe</label>
+                        <label for="passwordCheck">Confirmer nouveau mot de passe</label>
                         <input class="form-control"  type="password"  name="passwordCheck" placeholder="Confirmer mot de passe">
 
                         <!-- edit password button -->
@@ -47,16 +49,17 @@
 
                     <!-- edit password modal-->
                     <div class="modal fade" id="editPassword-{{ currentUser.userId }}" tabindex="-1" role="dialog" aria-labelledby="editPasswordLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                          <div class="modal-body">
-                              <p>Modifier mot de passe ?</p>
-                            <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
-                            <button type="submit" class="btn btn-outline-success btn-sm text-white">Modifier</a>
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <p>Modifier le mot de passe ?</p>
+                                    <p class="modal-small">Vous serez déconnecté afin de valider l'utilisation du nouveau mot de passe</p>
+                                    <button type="button" class="btn btn-outline-primary btn-sm text-white" data-bs-dismiss="modal">Annuler</button>
+                                    <button type="submit" class="btn btn-outline-success btn-sm text-white">Modifier</a>
                     </form>
-                          </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
             </div>
         </section>

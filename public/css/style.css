@@ -5499,7 +5499,6 @@ textarea.form-control-lg {
 }
 
 .modal-body {
- 
   padding: 1rem;
   font-weight : 300;
   color : white;
@@ -5542,6 +5541,10 @@ textarea.form-control-lg {
   text-align : center !important;
   font-family : "Open Sans", sans-serif !important;
   font-weight : 200 !important;
+}
+
+.modal-small{
+font-size:0.7em;
 }
 
 @media (min-width: 576px) {
