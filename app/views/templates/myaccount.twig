@@ -23,12 +23,6 @@
     		        	</div>
                     {% endfor %}
                 {% endif %}
-
-                {% if session.tmp.editPasswordSuccess %}
-                        <div class="alert alert-success" role="alert">
-    				        {{ session.tmp.editPasswordSuccess }}
-                        </div>
-                {% endif %}
                 
                     <form action="{{ session.routes.passedit }}{{ currentUser.userId }}" method="post">
                         <label for="usermail">Adresse email enregistrée</label>

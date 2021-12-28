@@ -89,7 +89,7 @@ class UserController{
     }
 
     public function editPassword($userId){
-        global $router, $twig;
+        global $router;
         unset($_SESSION['tmp']);
 
         // GETTING CURRENT USER INFOS
@@ -135,7 +135,7 @@ class UserController{
         //NO ERROR -- INSERT INTO DB
         if (empty($editPasswordErrors) && $checkPasswords && $checkOldPassword){
             $user->editUserPassword($userId, $passwordHash);
-            $editPasswordSuccess = "Votre mot de passe a été modifié.";
+            $editPasswordSuccess = "Votre mot de passe a été modifié, vous pouvez vous reconnecter.";
             $_SESSION['tmp'] = ['loginSuccess'=>$editPasswordSuccess];
             
             // DISCONNECTING USER
@@ -144,7 +144,9 @@ class UserController{
         }
         else{
             $_SESSION['tmp'] = ['editPasswordError'=>$editPasswordErrors];
-            print("<script type=\"text/javascript\">setTimeout('location=(".$router->generate('authentication').")' ,1000);</script>");
+            $URL = $router->generate('account');
+            echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
+            echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
         }
 
     }
